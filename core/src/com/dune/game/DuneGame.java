@@ -32,12 +32,8 @@ public class DuneGame extends ApplicationAdapter {
 
     public void update(float dt) {
         tank.update(dt);
-        try {
-            if (isTouch())
-                circle.update();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (isTouch())
+            circle.update();
     }
 
     private boolean isTouch() {
