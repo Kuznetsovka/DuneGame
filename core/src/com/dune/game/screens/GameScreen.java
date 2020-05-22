@@ -15,14 +15,14 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        this.gameController = new GameController();
-        this.worldRenderer = new WorldRenderer(batch, gameController);
+        this.gameController = new GameController ();
+        this.worldRenderer = new WorldRenderer (batch, gameController);
     }
 
     @Override
     public void render(float delta) {
-        gameController.update(delta);
-        worldRenderer.render();
+        gameController.update (delta);
+        worldRenderer.render ();
     }
 
     @Override

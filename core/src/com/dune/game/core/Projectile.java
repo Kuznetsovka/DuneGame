@@ -23,14 +23,14 @@ public class Projectile {
     }
 
     public Projectile(TextureAtlas atlas, boolean isFire) {
-        this.texture = new TextureRegion(atlas.findRegion("bullet"));
+        this.texture = new TextureRegion (atlas.findRegion ("bullet"));
         this.speed = 200.0f;
         this.isFire = isFire;
-        this.velocity = new Vector2 (0,0);
+        this.velocity = new Vector2 (0, 0);
     }
 
     public void fire(float angle) {
-        velocity.add(speed * MathUtils.cosDeg(angle), speed * MathUtils.sinDeg(angle));
+        velocity.add (speed * MathUtils.cosDeg (angle), speed * MathUtils.sinDeg (angle));
     }
 
     public boolean isFire() {
@@ -41,25 +41,25 @@ public class Projectile {
         // position.x += velocity.x * dt;
         // position.y += velocity.y * dt;
         if (isFire) {
-            position.mulAdd(velocity, dt);
-            rotate = (rotate+(int)(dt*speed))%360;
-            checkBounds();
+            position.mulAdd (velocity, dt);
+            rotate = (rotate + (int) (dt * speed)) % 360;
+            checkBounds ();
         }
     }
 
     public void render(SpriteBatch batch) {
         if (isFire)
-            batch.draw(texture, position.x, position.y, texture.getRegionWidth()/2, texture.getRegionHeight()/2, texture.getRegionWidth(), texture.getRegionHeight(), 1,1,rotate);
+            batch.draw (texture, position.x, position.y, texture.getRegionWidth () / 2, texture.getRegionHeight () / 2, texture.getRegionWidth (), texture.getRegionHeight (), 1, 1, rotate);
     }
 
     public void checkBounds() {
         if (position.x < 0 || position.x > 1280) {
             isFire = false;
-            velocity.set(0,0);
+            velocity.set (0, 0);
         }
         if (position.y < 0 || position.y > 720) {
             isFire = false;
-            velocity.set(0,0);
+            velocity.set (0, 0);
         }
     }
 }

@@ -11,18 +11,18 @@ public class DuneGame extends Game {
 
     @Override
     public void create() {
-        this.batch = new SpriteBatch();
-        this.gameScreen = new GameScreen(batch);
-        this.setScreen(gameScreen);
+        this.batch = new SpriteBatch ();
+        this.gameScreen = new GameScreen (batch);
+        this.setScreen (gameScreen);
     }
 
     @Override
     public void render() {
-        getScreen().render(Gdx.graphics.getDeltaTime());
+        getScreen ().render (Gdx.graphics.getDeltaTime ());
     }
 
     @Override
     public void dispose() {
-        batch.dispose();
+        batch.dispose ();
     }
 }

@@ -18,15 +18,15 @@ public class GameController {
 
     // Инициализация игровой логики
     public GameController() {
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("game.pack"));
-        this.map = new BattleMap(atlas);
-        this.tank = new Tank(atlas,200, 200);
+        TextureAtlas atlas = new TextureAtlas (Gdx.files.internal ("game.pack"));
+        this.map = new BattleMap (atlas);
+        this.tank = new Tank (atlas, 200, 200);
     }
 
     public void update(float dt) {
-        tank.update(dt);
-        getTank().getProjectile().update(dt);
-        checkCollisions(dt);
+        tank.update (dt);
+        getTank ().getProjectile ().update (dt);
+        checkCollisions (dt);
     }
 
     public void checkCollisions(float dt) {

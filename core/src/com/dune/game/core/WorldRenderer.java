@@ -14,12 +14,12 @@ public class WorldRenderer {
     }
 
     public void render() {
-        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        gc.getMap().render(batch);
-        gc.getTank().render(batch);
-        gc.getTank().getProjectile().render(batch);
-        batch.end();
+        Gdx.gl.glClearColor (0.0f, 0.0f, 0.0f, 1);
+        Gdx.gl.glClear (GL20.GL_COLOR_BUFFER_BIT);
+        batch.begin ();
+        gc.getMap ().render (batch);
+        gc.getTank ().render (batch);
+        gc.getTank ().getProjectile ().render (batch);
+        batch.end ();
     }
 }

@@ -16,22 +16,23 @@ public class Circle {
     }
 
     public Circle() {
-        this.position = new Vector2(getRandomX(),getRandomY());
-        this.texture = new Texture("circle.png");
-        this.diameter = texture.getWidth();
+        this.position = new Vector2 (getRandomX (), getRandomY ());
+        this.texture = new Texture ("circle.png");
+        this.diameter = texture.getWidth ();
         this.radius = diameter / 2;
     }
 
     private float getRandomX() {
-        return (float) Math.random() * (1280 - diameter) + radius;
+        return (float) Math.random () * (1280 - diameter) + radius;
     }
+
     private float getRandomY() {
-        return (float) Math.random() * (720 - diameter) + radius;
+        return (float) Math.random () * (720 - diameter) + radius;
     }
 
     public void update() {
-        position.x = getRandomX();
-        position.y = getRandomY();
+        position.x = getRandomX ();
+        position.y = getRandomY ();
     }
 
     public Vector2 getPosition() {
@@ -39,10 +40,10 @@ public class Circle {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(texture, position.x - radius, position.y - radius, radius, radius, diameter, diameter, 1, 1, 0, 0, 0, diameter, diameter, false, false);
+        batch.draw (texture, position.x - radius, position.y - radius, radius, radius, diameter, diameter, 1, 1, 0, 0, 0, diameter, diameter, false, false);
     }
 
     public void dispose() {
-        texture.dispose();
+        texture.dispose ();
     }
 }
