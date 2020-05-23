@@ -84,7 +84,7 @@ public class Tank {
     }
 
     private void fire() {
-        tmp.set (1, 0).rotate (angle).scl (27).add (position.x, position.y - 10);
+        tmp.set (position).add(32*MathUtils.cosDeg (angle),32*MathUtils.sinDeg (angle));
         projectile.fire (tmp, angle);
     }
 

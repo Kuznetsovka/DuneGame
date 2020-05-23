@@ -55,13 +55,9 @@ public class Projectile {
     }
 
     public void checkBounds() {
-        if (position.x < 0 || position.x > 1280) {
+        if (position.x < 0 || position.x > 1280 || position.y < 0 || position.y > 720) {
             isFire = false;
-            velocity.set (0, 0);
-        }
-        if (position.y < 0 || position.y > 720) {
-            isFire = false;
-            velocity.set (0, 0);
+            this.velocity.set(0,0);
         }
     }
 }
