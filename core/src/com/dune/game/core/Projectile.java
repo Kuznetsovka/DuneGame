@@ -19,18 +19,20 @@ public class Projectile {
     }
 
     public void setPosition(Vector2 position) {
-        this.position = position;
+        this.position.set(position);
     }
 
-    public Projectile(TextureAtlas atlas, boolean isFire) {
+    public Projectile(TextureAtlas atlas) {
         this.texture = new TextureRegion (atlas.findRegion ("bullet"));
         this.speed = 200.0f;
-        this.isFire = isFire;
+        this.position = new Vector2 ();
         this.velocity = new Vector2 (0, 0);
     }
 
-    public void fire(float angle) {
+    public void fire(Vector2 startPosition, float angle) {
+        this.position.set(startPosition);
         velocity.add (speed * MathUtils.cosDeg (angle), speed * MathUtils.sinDeg (angle));
+        isFire = true;
     }
 
     public boolean isFire() {

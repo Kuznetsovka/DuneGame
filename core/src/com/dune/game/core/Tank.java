@@ -33,7 +33,7 @@ public class Tank {
         this.position = new Vector2 (x, y);
         this.tmp = new Vector2 ();
         this.textures = new TextureRegion (atlas.findRegion ("tankanim")).split (64, 64)[0];
-        this.projectile = new Projectile (atlas, false);
+        this.projectile = new Projectile (atlas);
         this.speed = 140.0f;
         this.timePerFrame = 0.08f;
     }
@@ -47,8 +47,7 @@ public class Tank {
         Gdx.input.setInputProcessor (new InputAdapter () {
             public boolean touchDown(int x, int y, int pointer, int button) {
                 isMouseMothin = true;
-                //Не понимаю что не так?
-                tmp.set (x, y);
+                tmp.set (x, 720-y);
                 tmp.sub (position);
                 tmp.nor ();
                 return true;
@@ -78,17 +77,15 @@ public class Tank {
 
         if (Gdx.input.isKeyJustPressed (Input.Keys.ENTER)) {
             if (!projectile.isFire ()) {
-                Fire ();
+                fire ();
             }
         }
         checkBounds ();
     }
 
-    private void Fire() {
+    private void fire() {
         tmp.set (1, 0).rotate (angle).scl (27).add (position.x, position.y - 10);
-        projectile.setPosition (tmp);
-        projectile.fire (angle);
-        projectile.setFire (true);
+        projectile.fire (tmp, angle);
     }
 
     public void checkBounds() {
