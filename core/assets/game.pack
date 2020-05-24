@@ -1,7 +1,7 @@
 
 images1.png
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest,Nearest
 repeat: none
 grass
   rotate: false
@@ -27,6 +27,13 @@ turret
 tank
   rotate: false
   xy: 472, 2
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+circle
+  rotate: false
+  xy: 538, 2
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
