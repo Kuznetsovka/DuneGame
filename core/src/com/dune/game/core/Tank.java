@@ -94,5 +94,6 @@ public class Tank extends GameObject {
 
     public void render(SpriteBatch batch) {
         batch.draw(textures[getCurrentFrameIndex()], position.x - 40, position.y - 40, 40, 40, 80, 80, 1, 1, angle);
+
     }
 }

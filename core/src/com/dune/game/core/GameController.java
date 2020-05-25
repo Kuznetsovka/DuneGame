@@ -2,6 +2,8 @@ package com.dune.game.core;
 
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
+
 public class GameController {
     private BattleMap map;
     private ProjectilesController projectilesController;
@@ -36,17 +38,14 @@ public class GameController {
     }
 
     public void checkCollisions(float dt) {
-        float[][] data = getMap ().getDataPosition ();
+        ArrayList<Vector2> data = getMap ().getDataPositionObjects ();
         float distance;
-        for (int i = 0; i < data.length; i++) {
-            distance = tmp.set(getTank ().position).dst(data[i][0] , 720-data[i][1]);
-            if (distance<60.0f){
-                getMap ().update(dt,data[i][0] , data[i][1],true);
+        for (int i = 0; i < data.size (); i++) {
+            distance = tmp.set (getTank ().position).dst (data.get(i));
+            if (distance < getMap ().getWidthCircleTexture()) {
+                getMap ().update (dt, i, true);
             }
-
         }
-
-
     }
 }
 
