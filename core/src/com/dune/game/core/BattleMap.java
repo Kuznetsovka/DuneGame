@@ -3,63 +3,102 @@ package com.dune.game.core;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 
-import java.util.ArrayList;
+public class BattleMap {
+    private class Cell {
+        private int cellX, cellY;
+        private int resource;
+        private float resourceRegenerationRate;
+        private float resourceRegenerationTime;
 
-public class BattleMap{
-    private TextureRegion grassTexture;
-    private TextureRegion circleTexture;
-    private ArrayList<Vector2> dataPositionObjects;
-    private final int columns = 16; //Пока будут константами
-    private final int rows = 9; //Пока будут константами
-    private float widthCircleTexture;
+        public Cell(int cellX, int cellY) {
+            this.cellX = cellX;
+            this.cellY = cellY;
+            if(MathUtils.random() < 0.1f) {
+                resource = MathUtils.random(1, 3);
+            }
+            resourceRegenerationRate = MathUtils.random(5.0f) - 4.5f;
+            if (resourceRegenerationRate < 0.0f) {
+                resourceRegenerationRate = 0.0f;
+            } else {
+                resourceRegenerationRate *= 20.0f;
+                resourceRegenerationRate += 10.0f;
+            }
+        }
 
-    public float getWidthCircleTexture() {
-        return widthCircleTexture;
-    }
+        private void update(float dt) {
+            if (resourceRegenerationRate > 0.01f) {
+                resourceRegenerationTime += dt;
+                if (resourceRegenerationTime > resourceRegenerationRate) {
+                    resourceRegenerationTime = 0.0f;
+                    resource++;
+                    if (resource > 5) {
+                        resource = 5;
+                    }
+                }
+            }
+        }
 
-    public BattleMap() {
-        this.grassTexture = Assets.getInstance ().getAtlas ().findRegion ("grass");
-        this.circleTexture = Assets.getInstance ().getAtlas ().findRegion ("circle");
-        this.widthCircleTexture = circleTexture.getRegionWidth ();
-        this.dataPositionObjects = new ArrayList<> ();
-        initData();
-    }
-
-    public ArrayList<Vector2> getDataPositionObjects() {
-        return dataPositionObjects;
-    }
-
-    private void initData() {
-        //От 1 чтобы не делать проверку на попадание в экран.
-        for (int i = 1; i < columns; i++) {
-            for (int j = 1; j < rows; j++) {
-                int temp = MathUtils.random (1,5);
-                if (temp==1){
-                    dataPositionObjects.add(new Vector2(i*80,j*80));
-                    /*Решение создания векторов не нравиться, но по другому не получилось.
-                    Интересно будет посмотреть как правильнее.
-                     */
+        private void render(SpriteBatch batch) {
+            if (resource > 0) {
+                float scale = 0.5f + resource * 0.2f;
+                batch.draw(resourceTexture, cellX * 80, cellY * 80, 40, 40, 80, 80, scale, scale, 0.0f);
+            } else {
+                if (resourceRegenerationRate > 0.01f) {
+                    batch.draw(resourceTexture, cellX * 80, cellY * 80, 40, 40, 80, 80, 0.1f, 0.1f, 0.0f);
                 }
             }
         }
     }
 
-    public void update(float dt, int index, boolean isCollision){
-        //dt пока не нужно, но в будущем будет нужно, поэтому оставляю.
-        if (isCollision) {
-            dataPositionObjects.remove (index);
+    public static final int COLUMNS_COUNT = 16;
+    public static final int ROWS_COUNT = 9;
+    public static final int CELL_SIZE = 80;
+
+    private TextureRegion grassTexture;
+    private TextureRegion resourceTexture;
+    private Cell[][] cells;
+
+    public BattleMap() {
+        this.grassTexture = Assets.getInstance().getAtlas().findRegion("grass");
+        this.resourceTexture = Assets.getInstance().getAtlas().findRegion("resource");
+        this.cells = new Cell[COLUMNS_COUNT][ROWS_COUNT];
+        for (int i = 0; i < COLUMNS_COUNT; i++) {
+            for (int j = 0; j < ROWS_COUNT; j++) {
+                cells[i][j] = new Cell(i, j);
+            }
         }
     }
 
+    public int getResourceCount(Tank harvester) {
+        return cells[harvester.getCellX()][harvester.getCellY()].resource;
+    }
+
+    public int harvestResource(Tank harvester, int power) {
+        int value = 0;
+        if(cells[harvester.getCellX()][harvester.getCellY()].resource >= power) {
+            value = power;
+            cells[harvester.getCellX()][harvester.getCellY()].resource -= power;
+        } else {
+            value = cells[harvester.getCellX()][harvester.getCellY()].resource;
+            cells[harvester.getCellX()][harvester.getCellY()].resource = 0;
+        }
+        return value;
+    }
+
     public void render(SpriteBatch batch) {
-        for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < rows; j++) {
-                batch.draw (grassTexture, i * 80, j * 80);
-                for (Vector2 data : dataPositionObjects) {
-                    batch.draw(circleTexture, data.x - 40, data.y - 40, widthCircleTexture/2, widthCircleTexture/2, widthCircleTexture, widthCircleTexture, 1, 1, 0);
-                }
+        for (int i = 0; i < COLUMNS_COUNT; i++) {
+            for (int j = 0; j < ROWS_COUNT; j++) {
+                batch.draw(grassTexture, i * 80, j * 80);
+                cells[i][j].render(batch);
+            }
+        }
+    }
+
+    public void update(float dt) {
+        for (int i = 0; i < COLUMNS_COUNT; i++) {
+            for (int j = 0; j < ROWS_COUNT; j++) {
+                cells[i][j].update(dt);
             }
         }
     }

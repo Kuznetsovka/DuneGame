@@ -1,17 +1,15 @@
 package com.dune.game.core;
 
-import com.badlogic.gdx.math.Vector2;
-
-import java.util.ArrayList;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class GameController {
     private BattleMap map;
     private ProjectilesController projectilesController;
-    private Tank tank;
-    private Vector2 tmp;
+    private TanksController tanksController;
 
-    public Tank getTank() {
-        return tank;
+    public TanksController getTanksController() {
+        return tanksController;
     }
 
     public ProjectilesController getProjectilesController() {
@@ -25,28 +23,20 @@ public class GameController {
     // Инициализация игровой логики
     public GameController() {
         Assets.getInstance().loadAssets();
-        this.tmp = new Vector2 ();
         this.map = new BattleMap();
         this.projectilesController = new ProjectilesController(this);
-        this.tank = new Tank(this, 200, 200);;
+        this.tanksController = new TanksController(this);
+        this.tanksController.setup(200, 200, Tank.Owner.PLAYER);
+        this.tanksController.setup(400, 400, Tank.Owner.PLAYER);
     }
 
     public void update(float dt) {
-        tank.update(dt);
+        tanksController.update(dt);
         projectilesController.update(dt);
+        map.update(dt);
         checkCollisions(dt);
     }
 
     public void checkCollisions(float dt) {
-        ArrayList<Vector2> data = getMap ().getDataPositionObjects ();
-        float distance;
-        for (int i = 0; i < data.size (); i++) {
-            distance = tmp.set (getTank ().position).dst (data.get(i));
-            if (distance < getMap ().getWidthCircleTexture()) {
-                getMap ().update (dt, i, true);
-            }
-        }
     }
 }
-
-
