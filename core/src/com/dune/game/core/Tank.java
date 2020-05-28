@@ -142,5 +142,12 @@ public class Tank extends GameObject implements Poolable {
         } else {
             batch.draw(textures[getCurrentFrameIndex()], position.x - 40, position.y - 40, 40, 40, 80, 80, 1, 1, angle);
         }
+        //для понимания, что танк выбран
+        if (isSelected){
+            batch.setColor(1.0f, 0.0f, 0.0f, 0.5f);
+            batch.draw(textures[getCurrentFrameIndex()], position.x - 40, position.y - 40, 40, 40, 80, 80, 1, 1, angle);
+            batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+
     }
 }
