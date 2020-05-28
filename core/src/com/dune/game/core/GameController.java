@@ -1,7 +1,8 @@
 package com.dune.game.core;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 
 public class GameController {
     private BattleMap map;
@@ -31,10 +32,33 @@ public class GameController {
     }
 
     public void update(float dt) {
+        //Так как не вводим дополнительную кнопку не будет проблем с импортирование на андройд
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            Select (Gdx.input.getX (), 720 - Gdx.input.getY ());
+        }
         tanksController.update(dt);
         projectilesController.update(dt);
         map.update(dt);
         checkCollisions(dt);
+    }
+
+    private void Select(int x, int y) {
+        boolean isTank = false;
+        Vector2 tmp = new Vector2 ();
+        for (Tank tank : tanksController.activeList) {
+            if (isSelectTank (x, y, tmp, tank)) {
+                isTank = true;
+            }
+        }
+        if (isTank){
+            for (Tank tank : tanksController.activeList) {
+                tank.isSelected =(isSelectTank (x, y, tmp, tank));
+            }
+        }
+    }
+
+    private boolean isSelectTank(int x, int y, Vector2 tmp, Tank tank) {
+        return tank.position.dst (tmp.set (x, y)) < 30.0f;
     }
 
     public void checkCollisions(float dt) {

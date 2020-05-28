@@ -2,17 +2,16 @@ package com.dune.game.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class Tank extends GameObject implements Poolable {
     public enum Owner {
         PLAYER, AI
     }
-
+    private BitmapFont font10;
     private Owner ownerType;
     private Weapon weapon;
     private Vector2 destination;
@@ -22,10 +21,11 @@ public class Tank extends GameObject implements Poolable {
     private float angle;
     private float speed;
     private float rotationSpeed;
-
+    public boolean isSelected;
     private float moveTimer;
     private float timePerFrame;
     private int container;
+    private int limitContainer;
 
     @Override
     public boolean isActive() {
@@ -35,8 +35,11 @@ public class Tank extends GameObject implements Poolable {
     public Tank(GameController gc) {
         super(gc);
         this.progressbarTexture = Assets.getInstance().getAtlas().findRegion("progressbar");
+        this.font10 = Assets.getInstance().getAssetManager().get("fonts/font10.ttf");
         this.timePerFrame = 0.08f;
         this.rotationSpeed = 90.0f;
+        this.limitContainer = 5;
+        this.isSelected = false;
     }
 
     public void setup(Owner ownerType, float x, float y) {
@@ -45,7 +48,7 @@ public class Tank extends GameObject implements Poolable {
         this.ownerType = ownerType;
         this.speed = 120.0f;
         this.hp = 100;
-        this.weapon = new Weapon(Weapon.Type.HARVEST, 3.0f, 1);
+        this.weapon = new Weapon(Weapon.Type.HARVEST, 1.0f, 1);
         this.destination = new Vector2(position);
     }
 
@@ -54,10 +57,11 @@ public class Tank extends GameObject implements Poolable {
     }
 
     public void update(float dt) {
-        if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-            destination.set(Gdx.input.getX(), 720 - Gdx.input.getY());
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && isSelected) {
+                destination.set (Gdx.input.getX (), 720 - Gdx.input.getY ());
         }
-        if (position.dst(destination) > 3.0f) {
+
+        if (position.dst(destination) > 30.0f ) {
             float angleTo = tmp.set(destination).sub(position).angle();
             if (Math.abs(angle - angleTo) > 3.0f) {
                 if (angle > angleTo) {
@@ -94,7 +98,7 @@ public class Tank extends GameObject implements Poolable {
 
     public void updateWeapon(float dt) {
         if (weapon.getType() == Weapon.Type.HARVEST) {
-            if (gc.getMap().getResourceCount(this) > 0) {
+            if (gc.getMap().getResourceCount(this) > 0 && container < limitContainer) {
                 int result = weapon.use(dt);
                 if (result > -1) {
                     container += gc.getMap().harvestResource(this, result);
@@ -121,13 +125,22 @@ public class Tank extends GameObject implements Poolable {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(textures[getCurrentFrameIndex()], position.x - 40, position.y - 40, 40, 40, 80, 80, 1, 1, angle);
         if (weapon.getType() == Weapon.Type.HARVEST && weapon.getUsageTimePercentage() > 0.0f) {
             batch.setColor(0.2f, 0.2f, 0.0f, 1.0f);
-            batch.draw(progressbarTexture, position.x - 32, position.y + 30, 64, 12);
+            batch.draw(progressbarTexture, position.x - 32, position.y + 30, 64, 20);
             batch.setColor(1.0f, 1.0f, 0.0f, 1.0f);
-            batch.draw(progressbarTexture, position.x - 30, position.y + 32, 60 * weapon.getUsageTimePercentage(), 8);
+            batch.draw(progressbarTexture, position.x - 30, position.y + 32, 60 * weapon.getUsageTimePercentage(), 16);
             batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+            font10.draw(batch, Integer.toString (container), position.x - 32, position.y + 44, 64, 1, false);
+        }
+        if (container==limitContainer) {
+            font10.draw (batch, "FULL", position.x - 32, position.y + 44, 64, 1, false);
+            //batch.setColor(0.8f, 0.2f, 0.67f, 0.8f);
+            batch.setColor(1.0f, 1.0f, 0.0f, 1.0f);
+            batch.draw(textures[getCurrentFrameIndex()], position.x - 40, position.y - 40, 40, 40, 80, 80, 1, 1, angle);
+            batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        } else {
+            batch.draw(textures[getCurrentFrameIndex()], position.x - 40, position.y - 40, 40, 40, 80, 80, 1, 1, angle);
         }
     }
 }
