@@ -21,7 +21,7 @@ public class Tank extends GameObject implements Poolable {
     private float angle;
     private float speed;
     private float rotationSpeed;
-    public boolean isSelected;
+    protected boolean isSelected;
     private float moveTimer;
     private float timePerFrame;
     private int container;
@@ -54,6 +54,14 @@ public class Tank extends GameObject implements Poolable {
 
     private int getCurrentFrameIndex() {
         return (int) (moveTimer / timePerFrame) % textures.length;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public void update(float dt) {

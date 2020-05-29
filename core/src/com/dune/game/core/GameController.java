@@ -52,7 +52,8 @@ public class GameController {
         }
         if (isTank){
             for (Tank tank : tanksController.activeList) {
-                tank.isSelected =(isSelectTank (x, y, tmp, tank));
+                tank.setSelected(isSelectTank (x, y, tmp, tank));
+                //Опять видимо нарушаю инкапсуляцию. Норешение простое и прозрачное. КАК в таких случаях поступать???
             }
         }
     }
