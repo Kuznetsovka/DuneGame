@@ -1,6 +1,7 @@
 package com.dune.game.core;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -24,7 +25,7 @@ public class Projectile extends GameObject implements Poolable {
     public Projectile(GameController gc) {
         super(gc);
         this.velocity = new Vector2();
-        this.speed = 320.0f;
+        this.speed = 640.0f;
     }
 
     public void setup(Vector2 startPosition, float angle, TextureRegion texture) {
