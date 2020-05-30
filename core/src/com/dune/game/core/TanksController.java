@@ -20,8 +20,8 @@ public class TanksController extends ObjectPool<Tank> {
     }
 
     public void render(SpriteBatch batch) {
-        for (int i = 0; i < activeList.size(); i++) {
-            activeList.get(i).render(batch);
+        for (Tank tank : activeList) {
+            tank.render (batch);
         }
     }
 
@@ -31,18 +31,17 @@ public class TanksController extends ObjectPool<Tank> {
     }
 
     public Tank getNearestAiTank(Vector2 point) {
-        for (int i = 0; i < activeList.size(); i++) {
-            Tank t = activeList.get(i);
-            if (t.getOwnerType() == Tank.Owner.AI && t.getPosition().dst(point) < 30) {
-                return t;
+        for (Tank tank : activeList) {
+            if (tank.getOwnerType() == Tank.Owner.AI && tank.getPosition().dst(point) < 30) {
+                return tank;
             }
         }
         return null;
     }
 
     public void update(float dt) {
-        for (int i = 0; i < activeList.size(); i++) {
-            activeList.get(i).update(dt);
+        for (Tank tank : activeList) {
+            tank.update (dt);
         }
         playerUpdate(dt);
         aiUpdate(dt);
@@ -59,6 +58,7 @@ public class TanksController extends ObjectPool<Tank> {
                         t.commandMoveTo(tmp);
                     }
                     if (t.getWeapon().getType() == Weapon.Type.GROUND) {
+                        removeTarget(t);
                         Tank aiTank = gc.getTanksController().getNearestAiTank(tmp);
                         if (aiTank == null) {
                             t.commandMoveTo(tmp);
@@ -68,6 +68,12 @@ public class TanksController extends ObjectPool<Tank> {
                     }
                 }
             }
+        }
+    }
+
+    private void removeTarget(Tank t) {
+        if (freeList.contains (t.getTarget ())) {
+            t.RemoveTarget ();
         }
     }
 

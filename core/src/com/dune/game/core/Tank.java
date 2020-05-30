@@ -110,8 +110,10 @@ public class Tank extends GameObject implements Poolable {
 
     public void falling(int power){
        hp =  hp - power;
-//       if (hp < 0 )
-//        target = null;
+    }
+
+    public void RemoveTarget(){
+        target = null;
     }
 
     public void commandMoveTo(Vector2 point) {
