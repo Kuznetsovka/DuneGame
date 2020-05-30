@@ -1,7 +1,6 @@
 package com.dune.game.core;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +11,7 @@ public class Projectile extends GameObject implements Poolable {
     private float speed;
     private float angle;
     private boolean active;
+    private int power;
 
     @Override
     public boolean isActive() {
@@ -28,12 +28,17 @@ public class Projectile extends GameObject implements Poolable {
         this.speed = 640.0f;
     }
 
-    public void setup(Vector2 startPosition, float angle, TextureRegion texture) {
+    public int getPower() {
+        return power;
+    }
+
+    public void setup(Vector2 startPosition, float angle, TextureRegion texture, int power) {
         this.texture = texture;
         this.position.set(startPosition);
         this.angle = angle;
         this.velocity.set(speed * MathUtils.cosDeg(angle), speed * MathUtils.sinDeg(angle));
         this.active = true;
+        this.power = power;
     }
 
     public void render(SpriteBatch batch) {

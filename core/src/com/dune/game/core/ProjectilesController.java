@@ -19,19 +19,19 @@ public class ProjectilesController extends ObjectPool<Projectile> {
     }
 
     public void render(SpriteBatch batch) {
-        for (int i = 0; i < activeList.size(); i++) {
-            activeList.get(i).render(batch);
+        for (Projectile projectile : activeList) {
+            projectile.render(batch);
         }
     }
 
-    public void setup(Vector2 srcPosition, float angle) {
+    public void setup(Vector2 srcPosition, float angle, int power) {
         Projectile p = activateObject();
-        p.setup(srcPosition, angle, projectileTexture);
+        p.setup(srcPosition, angle, projectileTexture, power);
     }
 
     public void update(float dt) {
-        for (int i = 0; i < activeList.size(); i++) {
-            activeList.get(i).update(dt);
+        for (Projectile projectile : activeList) {
+            projectile.update (dt);
         }
         checkPool();
     }
