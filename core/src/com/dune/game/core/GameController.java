@@ -21,6 +21,11 @@ public class GameController {
     private Vector2 mouse;
     private Collider collider;
 
+    public List<AbstractUnit> getAiUnits() {
+        return aiUnits;
+    }
+
+    private List<AbstractUnit> aiUnits;
     private List<AbstractUnit> selectedUnits;
 
     public UnitsController getUnitsController() {
