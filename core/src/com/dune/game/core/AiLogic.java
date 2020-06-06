@@ -18,7 +18,7 @@ public class AiLogic {
                 if (u.getUnitType () == UnitType.BATTLE_TANK && u.getTarget () == null) {
                     battleProcessing (u);
                 }
-                if (u.getUnitType () == UnitType.HARVESTER) {
+                if (u.getUnitType () == UnitType.HARVESTER && u.getTarget () == null) {
                     harvesterProcessing (u);
                 }
             }
@@ -28,18 +28,18 @@ public class AiLogic {
     }
 
     private void harvesterProcessing(AbstractUnit unit) {
-//        for (int i = 0; i < gc.getUnitsController ().getAiUnits ().size (); i++) {
-//            if(unit.position)
-//        }
-//        unit.commandMoveTo();
-//        return;
+        for (int i = 0; i < gc.getUnitsController ().getAiHarvesterUnits ().size (); i++) {
+            Targetable tmp = gc.getMap ().getNearestResource (unit.getPosition ());
+            if (tmp!=null)
+                unit.commandAttack (tmp);
+        }
     }
 
     public void battleProcessing(AbstractUnit unit) {
         AbstractUnit playerUnit = gc.getUnitsController().getNearestCompetitorUnit (unit.getPosition (), Owner.PLAYER);
         if (playerUnit != null) {
             for (int j = 0; j < gc.getUnitsController ().getAiTankUnits ().size (); j++) {
-                    gc.getUnitsController ().getAiTankUnits ().get (j).commandAttack (playerUnit);
+                gc.getUnitsController ().getAiTankUnits ().get (j).commandAttack (playerUnit);
             }
         }
 
