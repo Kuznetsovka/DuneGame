@@ -4,12 +4,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.dune.game.core.units.TargetType;
-
-import static java.lang.Math.abs;
 
 public class BattleMap {
-    private class Cell implements Targetable {
+    private class Cell {
         private int cellX, cellY;
         private int resource;
         private float resourceRegenerationRate;
@@ -53,21 +50,13 @@ public class BattleMap {
                 }
             }
         }
-
-        @Override
-        public Vector2 getPosition() {
-            return new Vector2(cellX*CELL_SIZE,cellY*CELL_SIZE);
-        }
-
-        @Override
-        public TargetType getType() {
-            return TargetType.RESOURCE;
-        }
     }
 
-    public static final int COLUMNS_COUNT = 16;
-    public static final int ROWS_COUNT = 9;
+    public static final int COLUMNS_COUNT = 20;
+    public static final int ROWS_COUNT = 12;
     public static final int CELL_SIZE = 80;
+    public static final int MAP_WIDTH_PX = COLUMNS_COUNT * CELL_SIZE;
+    public static final int MAP_HEIGHT_PX = ROWS_COUNT * CELL_SIZE;
 
     private TextureRegion grassTexture;
     private TextureRegion resourceTexture;
@@ -88,19 +77,6 @@ public class BattleMap {
         int cx = (int) (point.x / CELL_SIZE);
         int cy = (int) (point.y / CELL_SIZE);
         return cells[cx][cy].resource;
-    }
-
-    public Targetable getNearestResource(Vector2 point) {
-        int cx = (int) (point.x / CELL_SIZE);
-        int cy = (int) (point.y / CELL_SIZE);
-        for (int i = 0; i < COLUMNS_COUNT; i++) {
-            for (int j = 0; j < ROWS_COUNT; j++) {
-                if (cells[i][j].resource>1 && abs(cx-i)<=3 && abs(cy-j)<=3){
-                    return new Cell (i,j);
-                }
-            }
-        }
-        return null;
     }
 
     public int harvestResource(Vector2 point, int power) {

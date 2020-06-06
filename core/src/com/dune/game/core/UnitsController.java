@@ -4,11 +4,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.dune.game.core.units.AbstractUnit;
+import com.dune.game.core.units.BattleTank;
 import com.dune.game.core.units.Owner;
-import com.dune.game.core.units.UnitType;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class UnitsController {
@@ -18,16 +17,6 @@ public class UnitsController {
     private List<AbstractUnit> units;
     private List<AbstractUnit> playerUnits;
     private List<AbstractUnit> aiUnits;
-    private List<AbstractUnit> aiHarvesterUnits;
-    private List<AbstractUnit> aiTankUnits;
-
-    public List<AbstractUnit> getAiHarvesterUnits() {
-        return aiHarvesterUnits;
-    }
-
-    public List<AbstractUnit> getAiTankUnits() {
-        return aiTankUnits;
-    }
 
     public List<AbstractUnit> getUnits() {
         return units;
@@ -48,8 +37,6 @@ public class UnitsController {
         this.units = new ArrayList<>();
         this.playerUnits = new ArrayList<>();
         this.aiUnits = new ArrayList<>();
-        this.aiHarvesterUnits = new ArrayList<> ();
-        this.aiTankUnits = new ArrayList<> ();
         for (int i = 0; i < 5; i++) {
             createBattleTank(Owner.PLAYER, MathUtils.random(80, 1200), MathUtils.random(80, 640));
         }
@@ -78,19 +65,11 @@ public class UnitsController {
         units.clear();
         aiUnits.clear();
         playerUnits.clear();
-        aiTankUnits.clear();
-        aiHarvesterUnits.clear();
         units.addAll(battleTanksController.getActiveList());
         units.addAll(harvestersController.getActiveList());
         for (int i = 0; i < units.size(); i++) {
             if (units.get(i).getOwnerType() == Owner.AI) {
                 aiUnits.add(units.get(i));
-                if (units.get(i).getUnitType () == UnitType.BATTLE_TANK){
-                    aiTankUnits.add(units.get(i));
-                }
-                if (units.get(i).getUnitType () == UnitType.HARVESTER){
-                    aiHarvesterUnits.add(units.get(i));
-                }
             }
             if (units.get(i).getOwnerType() == Owner.PLAYER) {
                 playerUnits.add(units.get(i));
@@ -103,7 +82,7 @@ public class UnitsController {
         harvestersController.render(batch);
     }
 
-    public AbstractUnit getNearestCompetitorUnit(Vector2 point) {
+    public AbstractUnit getNearestAiUnit(Vector2 point) {
         for (int i = 0; i < aiUnits.size(); i++) {
             AbstractUnit u = aiUnits.get(i);
             if (u.getPosition().dst(point) < 30) {
@@ -112,20 +91,4 @@ public class UnitsController {
         }
         return null;
     }
-
-    public AbstractUnit getNearestCompetitorUnit(Vector2 point, Owner typeCompetitor) {
-        List<AbstractUnit> competitorList = new ArrayList<> ();
-        List<Float> dst = new ArrayList<> ();
-        if (typeCompetitor==Owner.AI)
-            competitorList.addAll(aiUnits);
-        else
-            competitorList.addAll(playerUnits);
-
-        for (int i = 0; i < competitorList.size(); i++) {
-            AbstractUnit u = competitorList.get(i);
-            dst.add (u.getPosition().dst(point));
-        }
-        return competitorList.get(dst.indexOf (Collections.min(dst)));
-    }
-
 }
