@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.dune.game.core.units.AbstractUnit;
-import com.dune.game.core.units.BattleTank;
 import com.dune.game.core.units.Owner;
 
 import java.util.ArrayList;
@@ -82,13 +81,20 @@ public class UnitsController {
         harvestersController.render(batch);
     }
 
-    public AbstractUnit getNearestAiUnit(Vector2 point) {
-        for (int i = 0; i < aiUnits.size(); i++) {
-            AbstractUnit u = aiUnits.get(i);
+    public AbstractUnit getNearestCompetitorUnit(Vector2 point, Owner typeCompetitor) {
+        List<AbstractUnit> competitorList = new ArrayList<> ();
+        if (typeCompetitor==Owner.AI)
+            competitorList = aiUnits;
+        else
+            competitorList = playerUnits;
+
+        for (int i = 0; i < competitorList.size(); i++) {
+            AbstractUnit u = competitorList.get(i);
             if (u.getPosition().dst(point) < 30) {
                 return u;
             }
         }
         return null;
     }
+
 }

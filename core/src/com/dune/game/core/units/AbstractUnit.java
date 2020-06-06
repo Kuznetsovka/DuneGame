@@ -87,6 +87,10 @@ public abstract class AbstractUnit extends GameObject implements Poolable, Targe
         return (int) (moveTimer / timePerFrame) % textures.length;
     }
 
+    public Targetable getTarget() {
+        return target;
+    }
+
     public void update(float dt) {
         lifeTime += dt;
         // Если у танка есть цель, он пытается ее атаковать

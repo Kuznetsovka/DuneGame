@@ -7,27 +7,42 @@ import com.dune.game.core.units.UnitType;
 public class AiLogic {
     public GameController gc;
 
+    public AiLogic(GameController gc) {
+        this.gc = gc;
+    }
+
     public void update(float dt) {
-        for (int i = 0; i < gc.getSelectedUnits().size(); i++) {
-            AbstractUnit u = gc.getSelectedUnits().get(i);
-            if (u.getOwnerType() == Owner.PLAYER) {
-                unitProcessing(u);
+        try {
+            for (int i = 0; i < gc.getUnitsController ().getAiUnits ().size (); i++) {
+                AbstractUnit u = gc.getAiUnits ().get (i);
+                if (u.getUnitType () == UnitType.BATTLE_TANK && u.getTarget () == null) {
+                    battleProcessing (u);
+                }
+                if (u.getUnitType () == UnitType.HARVESTER) {
+                    harvesterProcessing (u);
+                }
             }
+        } catch (IndexOutOfBoundsException e) {
+
         }
     }
 
-    public void unitProcessing(AbstractUnit unit) {
-        if (unit.getUnitType() == UnitType.HARVESTER) {
-            unit.commandMoveTo(gc.getMouse());
-            return;
-        }
-        if (unit.getUnitType() == UnitType.BATTLE_TANK) {
-            AbstractUnit aiUnit = gc.getUnitsController().getNearestAiUnit(gc.getMouse());
-            if (aiUnit == null) {
-                unit.commandMoveTo(gc.getMouse());
-            } else {
-                unit.commandAttack(aiUnit);
+    private void harvesterProcessing(AbstractUnit unit) {
+//        for (int i = 0; i < gc.getUnitsController ().getAiUnits ().size (); i++) {
+//            if(unit.position)
+//        }
+//        unit.commandMoveTo();
+//        return;
+    }
+
+    public void battleProcessing(AbstractUnit unit) {
+        AbstractUnit playerUnit = gc.getUnitsController().getNearestCompetitorUnit (unit.getPosition (), Owner.PLAYER);
+        if (playerUnit == null) {
+            for (int j = 0; j < gc.getUnitsController ().getAiUnits ().size (); j++) {
+                gc.getUnitsController ().getAiUnits ().get (j).commandAttack (playerUnit);
             }
+
         }
+
     }
 }
