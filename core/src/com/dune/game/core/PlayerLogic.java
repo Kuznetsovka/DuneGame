@@ -30,7 +30,7 @@ public class PlayerLogic {
             return;
         }
         if (unit.getUnitType() == UnitType.BATTLE_TANK) {
-            AbstractUnit aiUnit = gc.getUnitsController().getNearestCompetitorUnit (gc.getMouse(),Owner.AI);
+            AbstractUnit aiUnit = gc.getUnitsController().getNearestCompetitorUnit (gc.getMouse());
             if (aiUnit == null) {
                 unit.commandMoveTo(gc.getMouse());
             } else {

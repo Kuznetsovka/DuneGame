@@ -21,11 +21,6 @@ public class GameController {
     private Vector2 selectionStart;
     private Vector2 mouse;
     private Collider collider;
-
-    public List<AbstractUnit> getAiUnits() {
-        return aiUnits;
-    }
-    private List<AbstractUnit> aiUnits;
     private List<AbstractUnit> selectedUnits;
 
     public UnitsController getUnitsController() {
@@ -56,7 +51,6 @@ public class GameController {
         this.collider = new Collider(this);
         this.selectionStart = new Vector2();
         this.selectedUnits = new ArrayList<>();
-        this.aiUnits = new ArrayList<> ();
         this.map = new BattleMap();
         this.projectilesController = new ProjectilesController(this);
         this.unitsController = new UnitsController(this);
