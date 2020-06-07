@@ -7,7 +7,10 @@ import com.dune.game.core.GameController;
 import com.dune.game.core.Targetable;
 import com.dune.game.core.Weapon;
 
+import java.util.List;
+
 public class Harvester extends AbstractUnit {
+
     public Harvester(GameController gc) {
         super(gc);
         this.textures = Assets.getInstance().getAtlas().findRegion("tankcore").split(64, 64)[0];
@@ -18,6 +21,7 @@ public class Harvester extends AbstractUnit {
         this.weapon = new Weapon(4.0f, 1);
         this.hpMax = 500;
         this.unitType = UnitType.HARVESTER;
+        this.tmp = new Vector2();
     }
 
     @Override
@@ -29,17 +33,37 @@ public class Harvester extends AbstractUnit {
     }
 
     public void updateWeapon(float dt) {
-        if (gc.getMap().getResourceCount(position) > 0) {
-            int result = weapon.use(dt);
-            if (result > -1) {
-                container += gc.getMap().harvestResource(position, result);
-                if (container > containerCapacity) {
-                    container = containerCapacity;
+        AbstractBuild b = myBase();
+        if (b!=null) {
+            float dst = tmp.set (position).dst (b.getPosition ());
+
+            if (gc.getMap ().getResourceCount (position) > 0) {
+                int result = weapon.use (dt);
+                if (result > -1) {
+                    container += gc.getMap ().harvestResource (position, result);
+                    if (container > containerCapacity) {
+                        container = containerCapacity;
+                    }
                 }
+            } else if (dst < 90) {
+                b.fillContainer (container);
+                container = 0;
+            } else {
+                weapon.reset ();
             }
-        } else {
-            weapon.reset();
         }
+
+    }
+
+    private AbstractBuild myBase() {
+        List<AbstractBuild> l = gc.getBuildController ().getBuilds ();
+        for (int i = 0; i < l.size (); i++) {
+            AbstractBuild b = l.get(i);
+            if (b.ownerType.equals (ownerType)){
+                return b;
+            }
+        }
+        return null;
     }
 
     @Override

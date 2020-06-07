@@ -2,8 +2,8 @@ package com.dune.game.core;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.dune.game.core.units.AbstractBuild;
 import com.dune.game.core.units.AbstractUnit;
-import com.dune.game.core.units.BattleTank;
 
 import java.util.List;
 
@@ -32,6 +32,20 @@ public class Collider {
                 }
             }
         }
+        List<AbstractBuild> builds = gc.getBuildController ().getBuilds ();
+        for (int i = 0; i < units.size(); i++) {
+            AbstractUnit u1 = units.get(i);
+            for (int j = 0; j < builds.size(); j++) {
+                AbstractBuild b = builds.get(j);
+                float dst = u1.getPosition().dst(b.getPosition());
+                if (dst < 30 + 50) {
+                    float colLengthD2 = (80 - dst) / 2;
+                    tmp.set(b.getPosition()).sub(u1.getPosition()).nor().scl(colLengthD2).scl(-1);
+                    u1.moveBy(tmp);
+                }
+            }
+        }
+
         for (int i = 0; i < gc.getProjectilesController().activeSize(); i++) {
             Projectile p = gc.getProjectilesController().getActiveList().get(i);
             for (int j = 0; j < gc.getUnitsController().getUnits().size(); j++) {

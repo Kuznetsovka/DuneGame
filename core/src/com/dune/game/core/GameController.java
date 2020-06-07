@@ -26,9 +26,15 @@ public class GameController {
     private PlayerLogic playerLogic;
     private ProjectilesController projectilesController;
     private ParticleController particleController;
+    private BuildController buildController;
     private UnitsController unitsController;
     private Vector2 tmp;
     private Vector2 selectionStart;
+
+    public PlayerLogic getPlayerLogic() {
+        return playerLogic;
+    }
+
     private Vector2 selectionEnd;
     private Vector2 mouse;
     private Collider collider;
@@ -89,9 +95,14 @@ public class GameController {
         this.map = new BattleMap();
         this.projectilesController = new ProjectilesController(this);
         this.particleController = new ParticleController();
+        this.buildController = new BuildController (this);
         this.unitsController = new UnitsController(this);
         this.pointOfView = new Vector2(ScreenManager.HALF_WORLD_WIDTH, ScreenManager.HALF_WORLD_HEIGHT);
         createGuiAndPrepareGameInput();
+    }
+
+    public BuildController getBuildController() {
+        return buildController;
     }
 
     public void update(float dt) {
@@ -99,6 +110,7 @@ public class GameController {
         mouse.set(Gdx.input.getX(), Gdx.input.getY());
         ScreenManager.getInstance().getViewport().unproject(mouse);
         unitsController.update(dt);
+        buildController.update (dt);
         playerLogic.update(dt);
         projectilesController.update(dt);
         map.update(dt);
@@ -145,7 +157,7 @@ public class GameController {
         }
     }
 
-    public boolean isUnitSelected(AbstractUnit abstractUnit) {
+    public boolean isUnitSelected(GameObject abstractUnit) {
         return selectedUnits.contains(abstractUnit);
     }
 
@@ -222,7 +234,6 @@ public class GameController {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Test");
-                ;
             }
         });
         Group menuGroup = new Group();

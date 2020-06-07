@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.dune.game.screens.ScreenManager;
 
 public class WorldRenderer {
@@ -29,6 +28,7 @@ public class WorldRenderer {
         gc.getMap().render(batch);
         gc.getUnitsController().render(batch);
         gc.getProjectilesController().render(batch);
+        gc.getBuildController ().render (batch);
         gc.getParticleController().render(batch);
         drawSelectionFrame();
         batch.end();

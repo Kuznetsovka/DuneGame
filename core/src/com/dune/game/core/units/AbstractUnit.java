@@ -41,10 +41,7 @@ public abstract class AbstractUnit extends GameObject implements Poolable, Targe
             return false;
         }
         hp -= damage;
-        if (hp <= 0) {
-            return true;
-        }
-        return false;
+        return (hp <= 0);
     }
 
     public UnitType getUnitType() {
@@ -80,6 +77,7 @@ public abstract class AbstractUnit extends GameObject implements Poolable, Targe
         this.progressbarTexture = Assets.getInstance().getAtlas().findRegion("progressbar");
         this.timePerFrame = 0.08f;
         this.rotationSpeed = 90.0f;
+        this.hpMax = 1000;
     }
 
     public abstract void setup(Owner ownerType, float x, float y);
