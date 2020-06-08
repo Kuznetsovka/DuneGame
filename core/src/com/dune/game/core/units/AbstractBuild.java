@@ -65,12 +65,12 @@ public abstract class AbstractBuild extends GameObject implements Poolable, Targ
 
     @Override
     public boolean isActive() {
-        return false;
+        return hp > 0;
     }
 
     @Override
     public TargetType getType() {
-        return null;
+        return TargetType.BUILD;
     }
 
     public abstract void update(float dt);

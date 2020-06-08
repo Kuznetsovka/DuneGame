@@ -2,6 +2,7 @@ package com.dune.game.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.dune.game.core.units.AbstractBuild;
 import com.dune.game.core.units.AbstractUnit;
 import com.dune.game.core.units.Owner;
 import com.dune.game.core.units.UnitType;
@@ -52,12 +53,16 @@ public class PlayerLogic {
             return;
         }
         if (unit.getUnitType() == UnitType.BATTLE_TANK) {
-            AbstractUnit aiUnit = gc.getUnitsController().getNearestAiUnit(gc.getMouse());
-            if (aiUnit == null) {
-                unit.commandMoveTo(gc.getMouse());
+            AbstractUnit aiUnit = gc.getUnitsController ().getNearestAiUnit (gc.getMouse ());
+            AbstractBuild aiBuild = gc.getBuildController ().getNearestAiBuild (gc.getMouse ());
+            if (aiUnit == null && aiBuild == null) {
+                unit.commandMoveTo (gc.getMouse ());
+            } else if (aiBuild == null) {
+                unit.commandAttack (aiUnit);
             } else {
-                unit.commandAttack(aiUnit);
+                unit.commandAttack (aiBuild);
             }
+
         }
     }
 }

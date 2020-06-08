@@ -13,6 +13,7 @@ public class Base extends AbstractBuild {
         this.ownerType = Owner.PLAYER;
         this.buildType = BuildType.BASE;
         this.container = 1000;
+        this.hpMax = 5000;
     }
 
     @Override

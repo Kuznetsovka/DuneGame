@@ -1,6 +1,7 @@
 package com.dune.game.core;
 
 import com.badlogic.gdx.math.Vector2;
+import com.dune.game.core.units.Owner;
 
 public abstract class GameObject {
     protected GameController gc;
@@ -28,4 +29,7 @@ public abstract class GameObject {
         this.position = new Vector2();
         this.tmp = new Vector2();
     }
+
+    public abstract Owner getOwnerType();
+
 }

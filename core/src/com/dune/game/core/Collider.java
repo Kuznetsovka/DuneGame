@@ -62,6 +62,23 @@ public class Collider {
                 }
             }
         }
+
+        for (int i = 0; i < gc.getProjectilesController().activeSize(); i++) {
+            Projectile p = gc.getProjectilesController().getActiveList().get(i);
+            for (int j = 0; j < gc.getBuildController ().getBuilds ().size(); j++) {
+                AbstractBuild b = gc.getBuildController ().getBuilds ().get(j);
+                if (p.getOwnerType() != b.getOwnerType () && p.getPosition().dst(b.getPosition()) < 50) {
+                    for (int k = 0; k < 25; k++) {
+                        tmp.set(p.getVelocity()).nor().scl(120.0f).add(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
+                        gc.getParticleController().setup(
+                                p.getPosition().x, p.getPosition().y, tmp.x, tmp.y, 0.4f, 1.0f, 0.2f,
+                                1, 0, 0, 1, 1, 1, 0, 0.6f);
+                    }
+                    p.deactivate();
+                    b.takeDamage(1000);
+                }
+            }
+        }
     }
 
 

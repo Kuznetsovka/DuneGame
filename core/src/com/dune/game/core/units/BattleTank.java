@@ -30,7 +30,7 @@ public class BattleTank extends AbstractUnit {
 
     public void updateWeapon(float dt) {
         if (target != null) {
-            if (!((AbstractUnit) target).isActive()) {
+            if (!target.isActive()) {
                 target = null;
                 return;
             }
@@ -48,7 +48,7 @@ public class BattleTank extends AbstractUnit {
 
     @Override
     public void commandAttack(Targetable target) {
-        if (target.getType() == TargetType.UNIT && ((AbstractUnit) target).getOwnerType() != this.ownerType) {
+        if (target.getType() == TargetType.UNIT || target.getType() == TargetType.BUILD && target.getOwnerType() != this.ownerType) {
             this.target = target;
         } else {
             commandMoveTo(target.getPosition());

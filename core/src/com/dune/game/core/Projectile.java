@@ -1,11 +1,11 @@
 package com.dune.game.core;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.dune.game.core.units.AbstractUnit;
+import com.dune.game.core.units.Owner;
 
 public class Projectile extends GameObject implements Poolable {
     private AbstractUnit owner;
@@ -36,6 +36,11 @@ public class Projectile extends GameObject implements Poolable {
         super(gc);
         this.velocity = new Vector2();
         this.speed = 640.0f;
+    }
+
+    @Override
+    public Owner getOwnerType() {
+        return owner.getOwnerType ();
     }
 
     public void setup(AbstractUnit owner, Vector2 startPosition, float angle, TextureRegion texture) {
