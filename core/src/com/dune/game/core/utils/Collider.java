@@ -1,9 +1,11 @@
-package com.dune.game.core;
+package com.dune.game.core.utils;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.dune.game.core.units.AbstractBuild;
+import com.dune.game.core.GameController;
+import com.dune.game.core.Projectile;
 import com.dune.game.core.units.AbstractUnit;
+import com.dune.game.core.units.BattleTank;
 
 import java.util.List;
 
@@ -32,25 +34,11 @@ public class Collider {
                 }
             }
         }
-        List<AbstractBuild> builds = gc.getBuildController ().getBuilds ();
-        for (int i = 0; i < units.size(); i++) {
-            AbstractUnit u1 = units.get(i);
-            for (int j = 0; j < builds.size(); j++) {
-                AbstractBuild b = builds.get(j);
-                float dst = u1.getPosition().dst(b.getPosition());
-                if (dst < 30 + 50) {
-                    float colLengthD2 = (80 - dst) / 2;
-                    tmp.set(b.getPosition()).sub(u1.getPosition()).nor().scl(colLengthD2).scl(-1);
-                    u1.moveBy(tmp);
-                }
-            }
-        }
-
         for (int i = 0; i < gc.getProjectilesController().activeSize(); i++) {
             Projectile p = gc.getProjectilesController().getActiveList().get(i);
             for (int j = 0; j < gc.getUnitsController().getUnits().size(); j++) {
                 AbstractUnit u = gc.getUnitsController().getUnits().get(j);
-                if (p.getOwner() != u && p.getPosition().dst(u.getPosition()) < 30) {
+                if (p.getOwner().getBaseLogic() != u.getBaseLogic() && p.getPosition().dst(u.getPosition()) < 30) {
                     for (int k = 0; k < 25; k++) {
                         tmp.set(p.getVelocity()).nor().scl(120.0f).add(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
                         gc.getParticleController().setup(
@@ -59,23 +47,6 @@ public class Collider {
                     }
                     p.deactivate();
                     u.takeDamage(5);
-                }
-            }
-        }
-
-        for (int i = 0; i < gc.getProjectilesController().activeSize(); i++) {
-            Projectile p = gc.getProjectilesController().getActiveList().get(i);
-            for (int j = 0; j < gc.getBuildController ().getBuilds ().size(); j++) {
-                AbstractBuild b = gc.getBuildController ().getBuilds ().get(j);
-                if (p.getOwnerType() != b.getOwnerType () && p.getPosition().dst(b.getPosition()) < 50) {
-                    for (int k = 0; k < 25; k++) {
-                        tmp.set(p.getVelocity()).nor().scl(120.0f).add(MathUtils.random(-40, 40), MathUtils.random(-40, 40));
-                        gc.getParticleController().setup(
-                                p.getPosition().x, p.getPosition().y, tmp.x, tmp.y, 0.4f, 1.0f, 0.2f,
-                                1, 0, 0, 1, 1, 1, 0, 0.6f);
-                    }
-                    p.deactivate();
-                    b.takeDamage(1000);
                 }
             }
         }

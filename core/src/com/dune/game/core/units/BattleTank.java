@@ -2,10 +2,13 @@ package com.dune.game.core.units;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.dune.game.core.Assets;
+import com.dune.game.core.units.types.TargetType;
+import com.dune.game.core.units.types.UnitType;
+import com.dune.game.screens.utils.Assets;
 import com.dune.game.core.GameController;
-import com.dune.game.core.Targetable;
+import com.dune.game.core.interfaces.Targetable;
 import com.dune.game.core.Weapon;
+import com.dune.game.core.users_logic.BaseLogic;
 
 public class BattleTank extends AbstractUnit {
     public BattleTank(GameController gc) {
@@ -21,16 +24,17 @@ public class BattleTank extends AbstractUnit {
     }
 
     @Override
-    public void setup(Owner ownerType, float x, float y) {
+    public void setup(BaseLogic baseLogic, float x, float y) {
         this.position.set(x, y);
-        this.ownerType = ownerType;
+        this.baseLogic = baseLogic;
+        this.ownerType = baseLogic.getOwnerType();
         this.hp = this.hpMax;
         this.destination = new Vector2(position);
     }
 
     public void updateWeapon(float dt) {
         if (target != null) {
-            if (!target.isActive()) {
+            if (!((AbstractUnit) target).isActive()) {
                 target = null;
                 return;
             }
@@ -48,7 +52,7 @@ public class BattleTank extends AbstractUnit {
 
     @Override
     public void commandAttack(Targetable target) {
-        if (target.getType() == TargetType.UNIT || target.getType() == TargetType.BUILD && target.getOwnerType() != this.ownerType) {
+        if (target.getType() == TargetType.UNIT && ((AbstractUnit) target).getOwnerType() != this.ownerType) {
             this.target = target;
         } else {
             commandMoveTo(target.getPosition());

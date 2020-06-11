@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.dune.game.screens.GameScreen;
 import com.dune.game.screens.ScreenManager;
 
 public class DuneGame extends Game {
@@ -12,8 +11,7 @@ public class DuneGame extends Game {
 
     // Домашнее задание:
     // 1. Разобраться с кодом
-    // 2. Сделайте площадку, куда харвестеры могут сдавать ресуры, и они должны начисляться игроку
-    // 3. Сделайте GUI для экрана меню (начать игру, выйти из игры) [ Выход через: Gdx.app.exit(); ]
+    // 2. Харвестеры AI должны собирать ресурсы и отвозить на базу
 
     @Override
     public void create() {
