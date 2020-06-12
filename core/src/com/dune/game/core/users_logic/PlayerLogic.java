@@ -11,12 +11,12 @@ public class PlayerLogic extends BaseLogic {
     public PlayerLogic(GameController gc) {
         this.gc = gc;
         this.money = 1000;
-        this.unitsCount = 10;
         this.unitsMaxCount = 100;
         this.ownerType = Owner.PLAYER;
     }
 
     public void update(float dt) {
+        this.unitsCount = gc.getUnitsController ().getPlayerUnits ().size ();
         if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
             for (int i = 0; i < gc.getSelectedUnits().size(); i++) {
                 AbstractUnit u = gc.getSelectedUnits().get(i);

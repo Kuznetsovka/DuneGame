@@ -131,6 +131,7 @@ public abstract class AbstractUnit extends GameObject implements Poolable, Targe
             if ((position.dst(destination) < 120.0f && Math.abs(angleTo - angle) > 10) || !gc.getMap().isCellGroundPassable(position)) {
                 position.mulAdd(tmp, -dt);
             }
+
         }
         updateWeapon(dt);
         checkBounds();

@@ -15,6 +15,7 @@ import com.dune.game.core.controllers.BuildingsController;
 import com.dune.game.core.controllers.ParticleController;
 import com.dune.game.core.controllers.ProjectilesController;
 import com.dune.game.core.controllers.UnitsController;
+import com.dune.game.core.gui.GuiAiInfo;
 import com.dune.game.core.gui.GuiPlayerInfo;
 import com.dune.game.core.units.AbstractUnit;
 import com.dune.game.core.users_logic.AiLogic;
@@ -31,6 +32,7 @@ public class GameController {
 
     private BattleMap map;
     private GuiPlayerInfo guiPlayerInfo;
+    private GuiAiInfo guiAiInfo;
     private PlayerLogic playerLogic;
     private AiLogic aiLogic;
     private ProjectilesController projectilesController;
@@ -45,6 +47,7 @@ public class GameController {
     private Vector2 pointOfView;
     private float worldTimer;
     private boolean paused;
+
 
 //    private Music music;
 //    private Sound sound;
@@ -158,6 +161,7 @@ public class GameController {
 //                    0.3f, 1.4f, 1, 1, 0, 1, 1, 0, 0, 0.5f);
 //        }
             guiPlayerInfo.update(dt);
+            guiAiInfo.update(dt);
         }
         ScreenManager.getInstance().resetCamera();
         stage.act(dt);
@@ -267,26 +271,31 @@ public class GameController {
             }
         });
 
-        final TextButton testBtn = new TextButton("Test", textButtonStyle);
-        testBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Test");
-                ;
-            }
-        });
+//        final TextButton testBtn = new TextButton("Pause", textButtonStyle);
+//        testBtn.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                System.out.println("Pause");
+//                ;
+//            }
+//        });
         Group menuGroup = new Group();
         menuBtn.setPosition(0, 0);
-        testBtn.setPosition(130, 0);
+//        testBtn.setPosition(130, 0);
         menuGroup.addActor(menuBtn);
-        menuGroup.addActor(testBtn);
-        menuGroup.setPosition(900, 680);
+//        menuGroup.addActor(testBtn);
+        menuGroup.setPosition(1100, 10);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(font14, Color.WHITE);
+        Label.LabelStyle labelStyle2 = new Label.LabelStyle(font14, Color.RED);
         skin.add("simpleLabel", labelStyle);
+        skin.add("redLabel", labelStyle2);
 
         guiPlayerInfo = new GuiPlayerInfo(playerLogic, skin);
         guiPlayerInfo.setPosition(0, 700);
+        guiAiInfo = new GuiAiInfo (aiLogic, skin);
+        guiAiInfo.setPosition(900, 700);
+        stage.addActor(guiAiInfo);
         stage.addActor(guiPlayerInfo);
         stage.addActor(menuGroup);
         skin.dispose();

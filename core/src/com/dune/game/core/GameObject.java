@@ -6,6 +6,7 @@ public abstract class GameObject {
     protected GameController gc;
     protected Vector2 position;
     protected Vector2 tmp;
+    protected float tmpDestination;
 
     public Vector2 getPosition() {
         return position;

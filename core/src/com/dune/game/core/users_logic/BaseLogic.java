@@ -9,6 +9,7 @@ public class BaseLogic {
     protected int money;
     protected int unitsCount;
     protected int unitsMaxCount;
+    protected float timer;
 
     public void addMoney(int amount) {
         this.money += amount;

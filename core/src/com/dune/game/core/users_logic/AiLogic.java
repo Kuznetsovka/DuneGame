@@ -13,17 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AiLogic extends BaseLogic {
-    private float timer;
 
     private List<BattleTank> tmpAiBattleTanks;
     private List<Harvester> tmpPlayerHarvesters;
-    private List<Harvester> tmpPlayerBattleTanks;
+    private List<BattleTank> tmpPlayerBattleTanks;
     private List<Harvester> tmpAiHarvesters;
 
     public AiLogic(GameController gc) {
         this.gc = gc;
         this.money = 1000;
-        this.unitsCount = 10;
         this.unitsMaxCount = 100;
         this.ownerType = Owner.AI;
         this.tmpAiBattleTanks = new ArrayList<>();
@@ -34,7 +32,8 @@ public class AiLogic extends BaseLogic {
     }
 
     public void update(float dt) {
-        timer += dt;
+        this.timer += dt;
+        this.unitsCount = gc.getUnitsController().getAiUnits().size ();
         if (timer > 2.0f) {
             timer = 0.0f;
             gc.getUnitsController().collectTanks(tmpAiBattleTanks, gc.getUnitsController().getAiUnits(), UnitType.BATTLE_TANK);

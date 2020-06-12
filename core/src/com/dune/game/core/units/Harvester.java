@@ -69,7 +69,7 @@ public class Harvester extends AbstractUnit {
     public void update(float dt) {
         super.update(dt);
         Building b = gc.getMap().getBuildingEntrance(getCellX(), getCellY());
-        if (b != null && b.getType() == Building.Type.STOCK && b.getOwnerLogic() == this.baseLogic) {
+        if (b != null && b.getTypeBuilding () == Building.Type.STOCK && b.getOwnerLogic() == this.baseLogic) {
             baseLogic.addMoney(container * 100);
             container = 0;
         }

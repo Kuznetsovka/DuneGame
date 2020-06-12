@@ -4,10 +4,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.dune.game.core.interfaces.Poolable;
+import com.dune.game.core.interfaces.Targetable;
+import com.dune.game.core.units.types.TargetType;
 import com.dune.game.core.users_logic.BaseLogic;
 import com.dune.game.screens.utils.Assets;
 
-public class Building extends GameObject implements Poolable {
+public class Building extends GameObject implements Poolable, Targetable {
+
     public enum Type {
         STOCK
     }
@@ -16,8 +19,10 @@ public class Building extends GameObject implements Poolable {
     // * P *
     //   E
     private BaseLogic ownerLogic;
-    private Type type;
+    private Type typeBuilding;
     private TextureRegion texture;
+    private TextureRegion textureEntrance;
+
     private Vector2 textureWorldPosition;
     private int hpMax;
     private int hp;
@@ -28,8 +33,13 @@ public class Building extends GameObject implements Poolable {
         return hp > 0;
     }
 
-    public Type getType() {
-        return type;
+    @Override
+    public TargetType getType() {
+        return TargetType.BUILDING;
+    }
+
+    public Type getTypeBuilding() {
+        return typeBuilding;
     }
 
     public BaseLogic getOwnerLogic() {
@@ -39,6 +49,7 @@ public class Building extends GameObject implements Poolable {
     public Building(GameController gc) {
         super(gc);
         this.texture = Assets.getInstance().getAtlas().findRegion("base");
+        this.textureEntrance = Assets.getInstance().getAtlas().findRegion("entrance");
         this.textureWorldPosition = new Vector2();
     }
 
@@ -50,7 +61,7 @@ public class Building extends GameObject implements Poolable {
         this.hpMax = 1000;
         this.hp = this.hpMax;
         this.textureWorldPosition.set((cellX - 1) * BattleMap.CELL_SIZE, cellY * BattleMap.CELL_SIZE);
-        this.type = Type.STOCK;
+        this.typeBuilding = Type.STOCK;
         for (int i = cellX - 1; i <= cellX + 1; i++) {
             for (int j = cellY; j <= cellY + 1; j++) {
                 gc.getMap().blockGroundCell(i, j);
@@ -65,7 +76,7 @@ public class Building extends GameObject implements Poolable {
     public void render(SpriteBatch batch) {
         batch.draw(texture, textureWorldPosition.x, textureWorldPosition.y, BattleMap.CELL_SIZE *2, BattleMap.CELL_SIZE * 2);
         batch.setColor(0.5f, 0.2f, 0.2f, 0.8f);
-        batch.draw(texture, textureWorldPosition.x + BattleMap.CELL_SIZE, textureWorldPosition.y - BattleMap.CELL_SIZE, BattleMap.CELL_SIZE, BattleMap.CELL_SIZE);
+        batch.draw(textureEntrance, textureWorldPosition.x + BattleMap.CELL_SIZE, textureWorldPosition.y - BattleMap.CELL_SIZE, BattleMap.CELL_SIZE, BattleMap.CELL_SIZE);
         batch.setColor(1, 1, 1, 1);
     }
 
