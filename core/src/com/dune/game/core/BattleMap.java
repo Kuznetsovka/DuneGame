@@ -4,15 +4,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.dune.game.core.interfaces.Targetable;
-import com.dune.game.core.units.types.TargetType;
 import com.dune.game.screens.utils.Assets;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BattleMap {
-    private class Cell implements Targetable {
+    private class Cell {
         private Building buildingEntrance;
         private int cellX, cellY;
         private int resource;
@@ -68,16 +63,6 @@ public class BattleMap {
 
         public void unblockGroundPass() {
             groundPassable = true;
-        }
-
-        @Override
-        public Vector2 getPosition() {
-            return  new Vector2(cellX * CELL_SIZE + CELL_SIZE/2, cellY * CELL_SIZE + CELL_SIZE/2);
-        }
-
-        @Override
-        public TargetType getType() {
-            return TargetType.RESOURCE;
         }
     }
 
@@ -141,17 +126,6 @@ public class BattleMap {
             cells[cx][cy].resource = 0;
         }
         return value;
-    }
-
-    public List<Cell> cellResource(){
-       List l = new ArrayList ();
-        for (int i = 0; i < COLUMNS_COUNT; i++) {
-            for (int j = 0; j < ROWS_COUNT; j++) {
-                if (cells[i][j].resource != 0)
-                    l.add (cells[i][j]);
-            }
-        }
-        return l;
     }
 
     public void render(SpriteBatch batch) {

@@ -38,7 +38,7 @@ public class Building extends GameObject implements Poolable {
 
     public Building(GameController gc) {
         super(gc);
-        this.texture = Assets.getInstance().getAtlas().findRegion("base");
+        this.texture = Assets.getInstance().getAtlas().findRegion("grass");
         this.textureWorldPosition = new Vector2();
     }
 
@@ -51,19 +51,18 @@ public class Building extends GameObject implements Poolable {
         this.hp = this.hpMax;
         this.textureWorldPosition.set((cellX - 1) * BattleMap.CELL_SIZE, cellY * BattleMap.CELL_SIZE);
         this.type = Type.STOCK;
-        for (int i = cellX - 1; i <= cellX + 1; i++) {
-            for (int j = cellY; j <= cellY + 1; j++) {
-                gc.getMap().blockGroundCell(i, j);
-            }
-        }
+
+//        for (int i = cellX - 1; i <= cellX + 1; i++) {
+//            for (int j = cellY; j <= cellY + 1; j++) {
+//                gc.getMap().blockGroundCell(i, j);
+//            }
+//        }
         gc.getMap().setupBuildingEntrance(cellX, cellY - 1, this);
-    }
-    public Vector2 posEntrance(){
-        return new Vector2(cellX *  BattleMap.CELL_SIZE + BattleMap.CELL_SIZE/2, (cellY - 1)* BattleMap.CELL_SIZE + BattleMap.CELL_SIZE/2);
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(texture, textureWorldPosition.x, textureWorldPosition.y, BattleMap.CELL_SIZE *2, BattleMap.CELL_SIZE * 2);
+        batch.setColor(0.5f, 0.5f, 0.5f, 0.6f);
+        batch.draw(texture, textureWorldPosition.x, textureWorldPosition.y, BattleMap.CELL_SIZE * 3, BattleMap.CELL_SIZE * 2);
         batch.setColor(0.5f, 0.2f, 0.2f, 0.8f);
         batch.draw(texture, textureWorldPosition.x + BattleMap.CELL_SIZE, textureWorldPosition.y - BattleMap.CELL_SIZE, BattleMap.CELL_SIZE, BattleMap.CELL_SIZE);
         batch.setColor(1, 1, 1, 1);

@@ -13,7 +13,7 @@ public class Harvester extends AbstractUnit {
         super(gc);
         this.textures = Assets.getInstance().getAtlas().findRegion("tankcore").split(64, 64)[0];
         this.weaponTexture = Assets.getInstance().getAtlas().findRegion("harvester");
-        this.containerCapacity = 2;
+        this.containerCapacity = 10;
         this.minDstToActiveTarget = 5.0f;
         this.speed = 120.0f;
         this.weapon = new Weapon(4.0f, 1);
@@ -43,11 +43,6 @@ public class Harvester extends AbstractUnit {
             weapon.reset();
         }
     }
-
-    public boolean isFull(){
-        return(container==containerCapacity);
-    }
-
 
     @Override
     public void commandAttack(Targetable target) {

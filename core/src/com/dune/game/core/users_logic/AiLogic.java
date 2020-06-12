@@ -1,8 +1,9 @@
 package com.dune.game.core.users_logic;
 
-import com.dune.game.core.Building;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.dune.game.core.BattleMap;
 import com.dune.game.core.GameController;
-import com.dune.game.core.interfaces.Targetable;
 import com.dune.game.core.units.AbstractUnit;
 import com.dune.game.core.units.BattleTank;
 import com.dune.game.core.units.Harvester;
@@ -18,7 +19,6 @@ public class AiLogic extends BaseLogic {
     private List<BattleTank> tmpAiBattleTanks;
     private List<Harvester> tmpPlayerHarvesters;
     private List<Harvester> tmpPlayerBattleTanks;
-    private List<Harvester> tmpAiHarvesters;
 
     public AiLogic(GameController gc) {
         this.gc = gc;
@@ -28,7 +28,6 @@ public class AiLogic extends BaseLogic {
         this.ownerType = Owner.AI;
         this.tmpAiBattleTanks = new ArrayList<>();
         this.tmpPlayerHarvesters = new ArrayList<>();
-        this.tmpAiHarvesters = new ArrayList<>();
         this.tmpPlayerBattleTanks = new ArrayList<>();
         this.timer = 10000.0f;
     }
@@ -39,43 +38,12 @@ public class AiLogic extends BaseLogic {
             timer = 0.0f;
             gc.getUnitsController().collectTanks(tmpAiBattleTanks, gc.getUnitsController().getAiUnits(), UnitType.BATTLE_TANK);
             gc.getUnitsController().collectTanks(tmpPlayerHarvesters, gc.getUnitsController().getPlayerUnits(), UnitType.HARVESTER);
-            gc.getUnitsController().collectTanks(tmpAiHarvesters, gc.getUnitsController().getAiUnits (), UnitType.HARVESTER);
             gc.getUnitsController().collectTanks(tmpPlayerBattleTanks, gc.getUnitsController().getPlayerUnits(), UnitType.BATTLE_TANK);
             for (int i = 0; i < tmpAiBattleTanks.size(); i++) {
                 BattleTank aiBattleTank = tmpAiBattleTanks.get(i);
                 aiBattleTank.commandAttack(findNearestTarget(aiBattleTank, tmpPlayerBattleTanks));
             }
-            for (int i = 0; i < tmpAiHarvesters.size(); i++) {
-                Harvester aiHarvester = tmpAiHarvesters.get(i);
-                if (!aiHarvester.isFull()) {
-                    aiHarvester.commandAttack (findNearestResources (aiHarvester, gc.getMap ().cellResource ()));
-                } else {
-                    for (int j = 0; j <gc.getBuildingsController ().getActiveList ().size () ; j++) {
-                        Building b = gc.getBuildingsController ().getActiveList ().get(j);
-                        if(aiHarvester.getBaseLogic () == b.getOwnerLogic ()){
-                            aiHarvester.commandMoveTo(b.posEntrance ());
-                        }
-                    }
-
-
-                }
-
-            }
         }
-    }
-
-    private <T extends Targetable> T findNearestResources(Harvester aiHarvester, List<T> cellResource) {
-        T target = null;
-        float minDist = 1000000.0f;
-        for (int i = 0; i < cellResource.size(); i++) {
-            T possibleTarget = cellResource.get(i);
-            float currentDst = aiHarvester.getPosition().dst(possibleTarget.getPosition ());
-            if (currentDst < minDist) {
-                target = possibleTarget;
-                minDist = currentDst;
-            }
-        }
-        return target;
     }
 
     public <T extends AbstractUnit> T findNearestTarget(AbstractUnit currentTank, List<T> possibleTargetList) {
