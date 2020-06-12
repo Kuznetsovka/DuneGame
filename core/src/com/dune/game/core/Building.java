@@ -38,7 +38,7 @@ public class Building extends GameObject implements Poolable {
 
     public Building(GameController gc) {
         super(gc);
-        this.texture = Assets.getInstance().getAtlas().findRegion("grass");
+        this.texture = Assets.getInstance().getAtlas().findRegion("base");
         this.textureWorldPosition = new Vector2();
     }
 
@@ -59,12 +59,11 @@ public class Building extends GameObject implements Poolable {
         gc.getMap().setupBuildingEntrance(cellX, cellY - 1, this);
     }
     public Vector2 posEntrance(){
-        return new Vector2(cellX *  BattleMap.CELL_SIZE, (cellY - 1)* BattleMap.CELL_SIZE);
+        return new Vector2(cellX *  BattleMap.CELL_SIZE + BattleMap.CELL_SIZE/2, (cellY - 1)* BattleMap.CELL_SIZE + BattleMap.CELL_SIZE/2);
     }
 
     public void render(SpriteBatch batch) {
-        batch.setColor(0.5f, 0.5f, 0.5f, 0.6f);
-        batch.draw(texture, textureWorldPosition.x, textureWorldPosition.y, BattleMap.CELL_SIZE * 3, BattleMap.CELL_SIZE * 2);
+        batch.draw(texture, textureWorldPosition.x, textureWorldPosition.y, BattleMap.CELL_SIZE *2, BattleMap.CELL_SIZE * 2);
         batch.setColor(0.5f, 0.2f, 0.2f, 0.8f);
         batch.draw(texture, textureWorldPosition.x + BattleMap.CELL_SIZE, textureWorldPosition.y - BattleMap.CELL_SIZE, BattleMap.CELL_SIZE, BattleMap.CELL_SIZE);
         batch.setColor(1, 1, 1, 1);
