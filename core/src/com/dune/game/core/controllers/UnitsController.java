@@ -3,6 +3,7 @@ package com.dune.game.core.controllers;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.dune.game.core.map.BattleMap;
 import com.dune.game.core.GameController;
 import com.dune.game.core.units.AbstractUnit;
 import com.dune.game.core.units.types.Owner;
@@ -14,11 +15,13 @@ import java.util.List;
 
 public class UnitsController {
     private GameController gc;
+    private Vector2 tmp;
     private BattleTanksController battleTanksController;
     private HarvestersController harvestersController;
     private List<AbstractUnit> units;
     private List<AbstractUnit> playerUnits;
     private List<AbstractUnit> aiUnits;
+    private List<AbstractUnit> selectUnits;
 
     public List<AbstractUnit> getUnits() {
         return units;
@@ -32,6 +35,9 @@ public class UnitsController {
         return aiUnits;
     }
 
+    public List<AbstractUnit> getSelectUnits() {
+        return selectUnits;
+    }
 
     public UnitsController(GameController gc) {
         this.gc = gc;
@@ -40,18 +46,29 @@ public class UnitsController {
         this.units = new ArrayList<>();
         this.playerUnits = new ArrayList<>();
         this.aiUnits = new ArrayList<>();
+        this.selectUnits = new ArrayList<> ();
+        this.tmp = new Vector2 ();
         for (int i = 0; i < 5; i++) {
-            createBattleTank(gc.getPlayerLogic(), MathUtils.random(80, 1200), MathUtils.random(80, 640));
+            choicePoint();
+            createBattleTank (gc.getPlayerLogic (), tmp.x,tmp.y);
+            choicePoint();
+            createHarvester(gc.getPlayerLogic(), tmp.x,tmp.y);
         }
-        for (int i = 0; i < 2; i++) {
-            createHarvester(gc.getPlayerLogic(), MathUtils.random(80, 1200), MathUtils.random(80, 640));
-        }
-        for (int i = 0; i < 2; i++) {
-            createBattleTank(gc.getAiLogic(), MathUtils.random(80, 1200), MathUtils.random(80, 640));
-        }
-        for (int i = 0; i < 2; i++) {
-            createHarvester(gc.getAiLogic(), MathUtils.random(80, 1200), MathUtils.random(80, 640));
-        }
+//        for (int i = 0; i < 5; i++) {
+//            choicePoint();
+//            createBattleTank (gc.getAiLogic (), tmp.x,tmp.y);
+//            choicePoint();
+//            createHarvester(gc.getAiLogic (), tmp.x,tmp.y);
+//        }
+    }
+
+    private Vector2 choicePoint() {
+        float X,Y;
+        do {
+            X = MathUtils.random (0, gc.getMap ().getSizeX () - 1) * BattleMap.CELL_SIZE + BattleMap.CELL_SIZE / 2;
+            Y = MathUtils.random (0, gc.getMap ().getSizeY () - 1) * BattleMap.CELL_SIZE + BattleMap.CELL_SIZE / 2;
+        } while(! gc.getMap ().isCellPassable(tmp.set (X,Y),false));
+        return tmp;
     }
 
     public void createBattleTank(BaseLogic baseLogic, float x, float y) {
@@ -70,12 +87,16 @@ public class UnitsController {
         playerUnits.clear();
         units.addAll(battleTanksController.getActiveList());
         units.addAll(harvestersController.getActiveList());
+
         for (int i = 0; i < units.size(); i++) {
             if (units.get(i).getOwnerType() == Owner.AI) {
                 aiUnits.add(units.get(i));
             }
             if (units.get(i).getOwnerType() == Owner.PLAYER) {
                 playerUnits.add(units.get(i));
+                if (units.get(i).isSelect ()){
+                    selectUnits.add(units.get(i));
+                }
             }
         }
     }
@@ -99,7 +120,27 @@ public class UnitsController {
         out.clear();
         for (int i = 0; i < srcList.size(); i++) {
             AbstractUnit au = srcList.get(i);
-            if (au.getUnitType() == unitType) {
+            if (au.getUnitType () == unitType) {
+                out.add ((T) au);
+            }
+        }
+    }
+
+    public <T> void collectTanksExcludeOwner(List<T> out, BaseLogic ownerLogic, UnitType unitType) {
+        out.clear();
+        for (int i = 0; i < units.size(); i++) {
+            AbstractUnit au = units.get(i);
+            if (au.getUnitType() == unitType && au.getBaseLogic() != ownerLogic) {
+                out.add((T) au);
+            }
+        }
+    }
+
+    public <T> void collectTanksByOwner(List<T> out, BaseLogic ownerLogic, UnitType unitType) {
+        out.clear();
+        for (int i = 0; i < units.size(); i++) {
+            AbstractUnit au = units.get(i);
+            if (au.getUnitType() == unitType && au.getBaseLogic() == ownerLogic) {
                 out.add((T) au);
             }
         }

@@ -1,12 +1,12 @@
 package com.dune.game.core;
 
 import com.badlogic.gdx.math.Vector2;
+import com.dune.game.core.map.BattleMap;
 
 public abstract class GameObject {
     protected GameController gc;
     protected Vector2 position;
     protected Vector2 tmp;
-    protected float tmpDestination;
 
     public Vector2 getPosition() {
         return position;

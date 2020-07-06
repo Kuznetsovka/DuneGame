@@ -17,19 +17,21 @@ import com.dune.game.core.controllers.ProjectilesController;
 import com.dune.game.core.controllers.UnitsController;
 import com.dune.game.core.gui.GuiAiInfo;
 import com.dune.game.core.gui.GuiPlayerInfo;
+import com.dune.game.core.map.BattleMap;
 import com.dune.game.core.units.AbstractUnit;
 import com.dune.game.core.users_logic.AiLogic;
 import com.dune.game.core.users_logic.PlayerLogic;
 import com.dune.game.core.utils.Collider;
 import com.dune.game.screens.ScreenManager;
 import com.dune.game.screens.utils.Assets;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class GameController {
     private static final float CAMERA_SPEED = 240.0f;
-
     private BattleMap map;
     private GuiPlayerInfo guiPlayerInfo;
     private GuiAiInfo guiAiInfo;
@@ -39,6 +41,7 @@ public class GameController {
     private ParticleController particleController;
     private UnitsController unitsController;
     private BuildingsController buildingsController;
+    private PathFinder pathFinder;
     private Vector2 tmp;
     private Vector2 selectionStart;
     private Vector2 selectionEnd;
@@ -47,75 +50,11 @@ public class GameController {
     private Vector2 pointOfView;
     private float worldTimer;
     private boolean paused;
-
+    private List<AbstractUnit> selectedUnits;
+    private Stage stage;
 
 //    private Music music;
 //    private Sound sound;
-
-    public float getWorldTimer() {
-        return worldTimer;
-    }
-
-    private List<AbstractUnit> selectedUnits;
-
-    private Stage stage;
-
-    public Stage getStage() {
-        return stage;
-    }
-
-    public ParticleController getParticleController() {
-        return particleController;
-    }
-
-    public PlayerLogic getPlayerLogic() {
-        return playerLogic;
-    }
-
-    public AiLogic getAiLogic() {
-        return aiLogic;
-    }
-
-    public Vector2 getSelectionStart() {
-        return selectionStart;
-    }
-
-
-    public boolean isPaused() {
-        return paused;
-    }
-
-    public Vector2 getSelectionEnd() {
-        return selectionEnd;
-    }
-
-    public Vector2 getPointOfView() {
-        return pointOfView;
-    }
-
-    public UnitsController getUnitsController() {
-        return unitsController;
-    }
-
-    public List<AbstractUnit> getSelectedUnits() {
-        return selectedUnits;
-    }
-
-    public Vector2 getMouse() {
-        return mouse;
-    }
-
-    public ProjectilesController getProjectilesController() {
-        return projectilesController;
-    }
-
-    public BattleMap getMap() {
-        return map;
-    }
-
-    public BuildingsController getBuildingsController() {
-        return buildingsController;
-    }
 
     public GameController() {
         this.mouse = new Vector2();
@@ -127,6 +66,7 @@ public class GameController {
         this.selectionEnd = new Vector2(-1, -1);
         this.selectedUnits = new ArrayList<>();
         this.map = new BattleMap();
+        this.pathFinder = new PathFinder(map);
         this.projectilesController = new ProjectilesController(this);
         this.particleController = new ParticleController();
         this.buildingsController = new BuildingsController(this);
@@ -140,9 +80,6 @@ public class GameController {
     }
 
     public void update(float dt) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-            paused = !paused;
-        }
         if (!paused) {
             worldTimer += dt;
             ScreenManager.getInstance().pointCameraTo(getPointOfView());
@@ -156,10 +93,6 @@ public class GameController {
             map.update(dt);
             collider.checkCollisions();
             particleController.update(dt);
-//        for (int i = 0; i < 5; i++) {
-//            particleController.setup(mouse.x, mouse.y, MathUtils.random(-15.0f, 15.0f), MathUtils.random(-30.0f, 30.0f), 0.5f,
-//                    0.3f, 1.4f, 1, 1, 0, 1, 1, 0, 0, 0.5f);
-//        }
             guiPlayerInfo.update(dt);
             guiAiInfo.update(dt);
         }
@@ -271,20 +204,19 @@ public class GameController {
             }
         });
 
-//        final TextButton testBtn = new TextButton("Pause", textButtonStyle);
-//        testBtn.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                System.out.println("Pause");
-//                ;
-//            }
-//        });
+        final TextButton pauseBtn = new TextButton("Pause", textButtonStyle);
+        pauseBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                paused = !paused;
+            }
+        });
         Group menuGroup = new Group();
         menuBtn.setPosition(0, 0);
-//        testBtn.setPosition(130, 0);
+        pauseBtn.setPosition(130, 0);
         menuGroup.addActor(menuBtn);
-//        menuGroup.addActor(testBtn);
-        menuGroup.setPosition(1100, 10);
+        menuGroup.addActor(pauseBtn);
+        menuGroup.setPosition(900, 10);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(font14, Color.WHITE);
         Label.LabelStyle labelStyle2 = new Label.LabelStyle(font14, Color.RED);
