@@ -106,6 +106,9 @@ public class UnitsController {
         harvestersController.render(batch);
     }
 
+    public void clearIndexSelected(int index){
+        selectUnits.remove (index);
+    }
     public AbstractUnit getNearestAiUnit(Vector2 point) {
         for (int i = 0; i < aiUnits.size(); i++) {
             AbstractUnit u = aiUnits.get(i);
@@ -114,6 +117,20 @@ public class UnitsController {
             }
         }
         return null;
+    }
+
+    public int getNearestInxSelectToDest(Vector2 point) {
+        float minTime = 100000f;
+        int index=0;
+        for (int i = 0; i < selectUnits.size (); i++) {
+            float uDst = selectUnits.get (i).getPosition ().dst (point);
+            float uTime = uDst / selectUnits.get (i).getSpeed ();
+            if (uTime < minTime) {
+                minTime = uTime;
+                index = i;
+            }
+        }
+        return index;
     }
 
     public <T> void collectTanks(List<T> out, List<AbstractUnit> srcList, UnitType unitType) {

@@ -52,6 +52,7 @@ public class GameController {
     private boolean paused;
     private List<AbstractUnit> selectedUnits;
     private Stage stage;
+    private boolean isMultiSelect;
 
 //    private Music music;
 //    private Sound sound;
@@ -149,6 +150,7 @@ public class GameController {
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
                 if (button == Input.Buttons.LEFT) {
+                    isMultiSelect = false;
                     tmp.set(mouse);
 
                     if (tmp.x < selectionStart.x) {
@@ -180,6 +182,8 @@ public class GameController {
                             }
                         }
                     }
+                    if (selectedUnits.size()>1)
+                        isMultiSelect = true;
 
                     selectionStart.set(-1, -1);
                 }

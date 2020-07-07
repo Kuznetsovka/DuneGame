@@ -54,13 +54,6 @@ public class BaseLogic {
         return ownerType;
     }
 
-    public boolean isMultiSelect(){
-        int countSelect = gc.getUnitsController().getSelectUnits().size ();
-        if (countSelect>1)
-            return true;
-        return false;
-    }
-
     protected  <T extends AbstractUnit> T findNearestTarget(AbstractUnit currentTank, List<T> possibleTargetList) {
         T target = null;
         float minDist = 1000000.0f;

@@ -11,6 +11,7 @@ import com.dune.game.core.units.types.Owner;
 import com.dune.game.core.units.types.UnitType;
 
 public class PlayerLogic extends BaseLogic {
+
     public PlayerLogic(GameController gc) {
         this.gc = gc;
         this.money = 1000;
@@ -51,7 +52,7 @@ public class PlayerLogic extends BaseLogic {
     }
 
     public void unitProcessing(AbstractUnit unit) {
-        if (gc.getSelectedUnits ().size ()==1)
+        if (!gc.isMultiSelect ())
             tmp = gc.getMouse ();
         else
             tmp = unit.getDestination();
@@ -83,7 +84,6 @@ public class PlayerLogic extends BaseLogic {
     private void pointInFormation() {
         tmp = gc.getMouse ();
         int n = (int)Math.ceil(Math.sqrt (gc.getSelectedUnits ().size()));
-        int[][] m = new int[n][n];
         // центр
         int i = n / 2;
         int j = n / 2;
@@ -91,10 +91,12 @@ public class PlayerLogic extends BaseLogic {
         int min_i = i; int max_i = i; // влево вправо
         int min_j = j; int max_j = j; // вверх вниз
         int d = 0; // сначала пойдем влево
-        for (int a = 0; a < gc.getSelectedUnits ().size(); a++) {
-            AbstractUnit u = gc.getSelectedUnits ().get(a);
+        while(gc.getUnitsController ().getSelectUnits ().size()>1) {
+        //for (int a = 0; a < gc.getSelectedUnits ().size(); a++) {
+            int indexUnit = gc.getUnitsController ().getNearestInxSelectToDest(tmp);
+            AbstractUnit u = gc.getUnitsController ().getSelectUnits ().get(indexUnit);
             u.newDestination(tmp);
-            m[i][j] = a;
+            gc.getUnitsController ().clearIndexSelected (indexUnit);
             switch (d) {
                 case 0:
                     i -= 1;  // движение влево

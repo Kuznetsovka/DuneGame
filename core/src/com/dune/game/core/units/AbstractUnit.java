@@ -267,7 +267,7 @@ public abstract class AbstractUnit extends GameObject implements Poolable, Targe
             for (int i = 0; i < 20; i++) {
                 float x = position.x + (realCellXDestination * BattleMap.CELL_SIZE + BattleMap.CELL_SIZE / 2 - position.x) / 20.0f * i;
                 float y = position.y + (realCellYDestination * BattleMap.CELL_SIZE + BattleMap.CELL_SIZE / 2 - position.y) / 20.0f * i;
-                batch.draw (selectorTexture, x - CORE_SIZE_D2, y - CORE_SIZE_D2, CORE_SIZE_D2, CORE_SIZE_D2, CORE_SIZE, CORE_SIZE, 0.2f, 0.2f, 0.0f);
+                batch.draw (selectorTexture, x - CORE_SIZE_D2, y - CORE_SIZE_D2, CORE_SIZE_D2, CORE_SIZE_D2, CORE_SIZE, CORE_SIZE, 0.1f, 0.1f, 0.0f);
             }
         }
 
