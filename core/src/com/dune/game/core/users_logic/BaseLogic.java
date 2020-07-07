@@ -7,11 +7,11 @@ import com.dune.game.core.units.AbstractUnit;
 import com.dune.game.core.units.BattleTank;
 import com.dune.game.core.units.Harvester;
 import com.dune.game.core.units.types.Owner;
-import com.dune.game.core.units.types.UnitType;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Getter
 public class BaseLogic {
     protected Owner ownerType;
     protected GameController gc;
@@ -36,22 +36,6 @@ public class BaseLogic {
 
     public void addMoney(int amount) {
         this.money += amount;
-    }
-
-    public int getMoney() {
-        return money;
-    }
-
-    public int getUnitsCount() {
-        return unitsCount;
-    }
-
-    public int getUnitsMaxCount() {
-        return unitsMaxCount;
-    }
-
-    public Owner getOwnerType() {
-        return ownerType;
     }
 
     protected  <T extends AbstractUnit> T findNearestTarget(AbstractUnit currentTank, List<T> possibleTargetList) {

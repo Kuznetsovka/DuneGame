@@ -92,7 +92,6 @@ public class PlayerLogic extends BaseLogic {
         int min_j = j; int max_j = j; // вверх вниз
         int d = 0; // сначала пойдем влево
         while(gc.getUnitsController ().getSelectUnits ().size()>1) {
-        //for (int a = 0; a < gc.getSelectedUnits ().size(); a++) {
             int indexUnit = gc.getUnitsController ().getNearestInxSelectToDest(tmp);
             AbstractUnit u = gc.getUnitsController ().getSelectUnits ().get(indexUnit);
             u.newDestination(tmp);

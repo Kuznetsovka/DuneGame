@@ -72,11 +72,6 @@ public class Building extends GameObject implements Poolable, Targetable, Select
         this.textureWorldPosition.set ((cellX - 1) * BattleMap.CELL_SIZE, cellY * BattleMap.CELL_SIZE);
         this.typeBuilding = Type.STOCK;
         gc.getMap().setupBuilding(cellX - 1, cellY, cellX + 1, cellY + 1, cellX, cellY - 1, this);
-//        for (int i = cellX - 1; i <= cellX + 1; i++) {
-//            for (int j = cellY; j <= cellY + 1; j++) {
-//                gc.getMap ().blockGroundCell (i, j);
-//            }
-//        }
         gc.getMap ().setupBuildingEntrance (cellX, cellY - 1, this);
     }
 

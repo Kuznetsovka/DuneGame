@@ -62,18 +62,6 @@ public class PathFinder {
                         }
                     }
                 }
-//                if (i > 0 && gameMap.isCellPassable(i - 1, j, false)) {
-//                    this.nodes[i][j].neighbors.add(this.nodes[i - 1][j]);
-//                }
-//                if (i < gameMap.getSizeX() - 1 && gameMap.isCellPassable(i + 1, j, false)) {
-//                    this.nodes[i][j].neighbors.add(this.nodes[i + 1][j]);
-//                }
-//                if (j > 0 && gameMap.isCellPassable(i, j - 1, false)) {
-//                    this.nodes[i][j].neighbors.add(this.nodes[i][j - 1]);
-//                }
-//                if (j < gameMap.getSizeY() - 1 && gameMap.isCellPassable(i, j + 1, false)) {
-//                    this.nodes[i][j].neighbors.add(this.nodes[i][j + 1]);
-//                }
             }
         }
 

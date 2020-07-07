@@ -45,7 +45,6 @@ public class Harvester extends AbstractUnit {
         }
     }
 
-
     public boolean isFull(){
         return(container==containerCapacity);
     }

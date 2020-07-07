@@ -104,13 +104,6 @@ public abstract class AbstractUnit extends GameObject implements Poolable, Targe
     public void update(float dt) {
         gc.getMap().unblockCell(getCellX(), getCellY(), Cell.BlockType.UNIT);
         lifeTime += dt;
-
-//        if (target != null) {
-//            commandMoveTo(target.getPosition(), false);
-//            if (position.dst(target.getPosition()) < minDstToActiveTarget) {
-//                commandMoveTo(position, false);
-//            }
-//        }
         if (target == null) {
             weapon.setAngle(rotateTo(weapon.getAngle(), angle, 180.0f, dt));
         }
@@ -142,10 +135,6 @@ public abstract class AbstractUnit extends GameObject implements Poolable, Targe
                 position.mulAdd(tmp, dt);
             }
 
-//            if (!gc.getMap().isCellGroundPassable(position)) {
-//                tmp.set(position).sub(getCellX() * BattleMap.CELL_SIZE + BattleMap.CELL_SIZE / 2, getCellY() * BattleMap.CELL_SIZE + BattleMap.CELL_SIZE / 2).nor().scl(2);
-//                position.add(tmp);
-//            }
         } else {
             isMove = false;
             position.set(destination);

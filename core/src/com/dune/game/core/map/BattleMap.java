@@ -38,32 +38,6 @@ public class BattleMap implements GameMap {
         return cells;
     }
 
-    //    public void blockGroundCell(int cellX, int cellY) {
-//        cells[cellX][cellY].blockGroundPass();
-//    }
-//
-//    public void unblockGroundCell(int cellX, int cellY) {
-//        cells[cellX][cellY].unblockGroundPass();
-//    }
-//
-//    public void blockAirCell(int cellX, int cellY) {
-//        cells[cellX][cellY].blockAirPass();
-//    }
-//
-//    public void unblockAirCell(int cellX, int cellY) {
-//        cells[cellX][cellY].unblockAirPass();
-//    }
-//
-//
-//    public boolean isCellGroundPassable(Vector2 position) {
-//        int cellX = (int) (position.x / BattleMap.CELL_SIZE);
-//        int cellY = (int) (position.y / BattleMap.CELL_SIZE);
-//        if (cellX < 0 || cellY < 0 || cellX >= COLUMNS_COUNT || cellY >= ROWS_COUNT) {
-//            return false;
-//        }
-//        return cells[cellX][cellY].groundPassable;
-//    }
-
     public void blockCell(int cellX, int cellY, Cell.BlockType blockType) {
         cells[cellX][cellY].block(blockType);
     }

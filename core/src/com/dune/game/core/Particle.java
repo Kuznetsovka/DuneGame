@@ -2,7 +2,9 @@ package com.dune.game.core;
 
 import com.badlogic.gdx.math.Vector2;
 import com.dune.game.core.interfaces.Poolable;
+import lombok.Getter;
 
+@Getter
 public class Particle implements Poolable {
     private Vector2 position;
     private Vector2 velocity;
@@ -13,62 +15,6 @@ public class Particle implements Poolable {
     private float time;
     private float timeMax;
     private float size1, size2;
-
-    public Vector2 getPosition() {
-        return position;
-    }
-
-    public Vector2 getVelocity() {
-        return velocity;
-    }
-
-    public float getR1() {
-        return r1;
-    }
-
-    public float getG1() {
-        return g1;
-    }
-
-    public float getB1() {
-        return b1;
-    }
-
-    public float getA1() {
-        return a1;
-    }
-
-    public float getR2() {
-        return r2;
-    }
-
-    public float getG2() {
-        return g2;
-    }
-
-    public float getB2() {
-        return b2;
-    }
-
-    public float getA2() {
-        return a2;
-    }
-
-    public float getTime() {
-        return time;
-    }
-
-    public float getTimeMax() {
-        return timeMax;
-    }
-
-    public float getSize1() {
-        return size1;
-    }
-
-    public float getSize2() {
-        return size2;
-    }
 
     @Override
     public boolean isActive() {

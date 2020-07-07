@@ -9,10 +9,11 @@ import com.dune.game.core.units.AbstractUnit;
 import com.dune.game.core.units.types.Owner;
 import com.dune.game.core.units.types.UnitType;
 import com.dune.game.core.users_logic.BaseLogic;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Getter
 public class UnitsController {
     private GameController gc;
     private Vector2 tmp;
@@ -22,22 +23,6 @@ public class UnitsController {
     private List<AbstractUnit> playerUnits;
     private List<AbstractUnit> aiUnits;
     private List<AbstractUnit> selectUnits;
-
-    public List<AbstractUnit> getUnits() {
-        return units;
-    }
-
-    public List<AbstractUnit> getPlayerUnits() {
-        return playerUnits;
-    }
-
-    public List<AbstractUnit> getAiUnits() {
-        return aiUnits;
-    }
-
-    public List<AbstractUnit> getSelectUnits() {
-        return selectUnits;
-    }
 
     public UnitsController(GameController gc) {
         this.gc = gc;
@@ -51,15 +36,15 @@ public class UnitsController {
         for (int i = 0; i < 5; i++) {
             choicePoint();
             createBattleTank (gc.getPlayerLogic (), tmp.x,tmp.y);
-            choicePoint();
-            createHarvester(gc.getPlayerLogic(), tmp.x,tmp.y);
         }
-//        for (int i = 0; i < 5; i++) {
-//            choicePoint();
-//            createBattleTank (gc.getAiLogic (), tmp.x,tmp.y);
-//            choicePoint();
-//            createHarvester(gc.getAiLogic (), tmp.x,tmp.y);
-//        }
+        choicePoint();
+        createHarvester(gc.getPlayerLogic(), tmp.x,tmp.y);
+        for (int i = 0; i < 2; i++) {
+            choicePoint();
+            createBattleTank (gc.getAiLogic (), tmp.x,tmp.y);
+        }
+        choicePoint();
+        createHarvester(gc.getAiLogic (), tmp.x,tmp.y);
     }
 
     private Vector2 choicePoint() {
