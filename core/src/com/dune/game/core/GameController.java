@@ -60,21 +60,25 @@ public class GameController {
     public GameController() {
         this.mouse = new Vector2();
         this.tmp = new Vector2();
-        this.playerLogic = new PlayerLogic(this);
+
+        this.map = new BattleMap();
+
         this.aiLogic = new AiLogic(this);
+        this.playerLogic = new PlayerLogic(this);
+
+        this.buildingsController = new BuildingsController(this);
+        this.buildingsController.setup(3, 3, playerLogic);
+        this.buildingsController.setup(14, 8, aiLogic);
+
         this.collider = new Collider(this);
         this.selectionStart = new Vector2(-1, -1);
         this.selectionEnd = new Vector2(-1, -1);
         this.selectedUnits = new ArrayList<>();
-        this.map = new BattleMap();
         this.pathFinder = new PathFinder(map);
         this.projectilesController = new ProjectilesController(this);
         this.particleController = new ParticleController();
-        this.buildingsController = new BuildingsController(this);
         this.unitsController = new UnitsController(this);
         this.pointOfView = new Vector2(ScreenManager.HALF_WORLD_WIDTH, ScreenManager.HALF_WORLD_HEIGHT);
-        this.buildingsController.setup(3, 3, playerLogic);
-        this.buildingsController.setup(14, 8, aiLogic);
 //        this.music = Gdx.audio.newMusic(Gdx.files.internal("1.mp3"));
 //        this.sound = Gdx.audio.newSound(Gdx.files.internal("explosion.wav"));
         createGuiAndPrepareGameInput();
@@ -215,6 +219,24 @@ public class GameController {
                 paused = !paused;
             }
         });
+
+        final TextButton createTank = new TextButton("Create Tank", textButtonStyle);
+        final TextButton createHarvester = new TextButton("Create Harvester", textButtonStyle);
+        createTank.addListener(new ClickListener () {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                getUnitsController ().setupBattleTank (playerLogic,true);
+
+            }
+        });
+
+        createHarvester.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                getUnitsController ().setupHarvester (playerLogic,true);
+
+            }
+        });
         Group menuGroup = new Group();
         menuBtn.setPosition(0, 0);
         pauseBtn.setPosition(130, 0);
@@ -226,6 +248,15 @@ public class GameController {
         Label.LabelStyle labelStyle2 = new Label.LabelStyle(font14, Color.RED);
         skin.add("simpleLabel", labelStyle);
         skin.add("redLabel", labelStyle2);
+
+        Group createGroup = new Group();
+        createGroup.setVisible (false);
+        createGroup.setPosition(getUnitsController ().basePosition(getPlayerLogic()).x,getUnitsController ().basePosition(getPlayerLogic()).y);
+        createTank.setPosition(0, 0);
+        createHarvester.setPosition(130, 0);
+        createGroup.addActor(createTank);
+        createGroup.addActor(createHarvester);
+        stage.addActor(createGroup);
 
         guiPlayerInfo = new GuiPlayerInfo(playerLogic, skin);
         guiPlayerInfo.setPosition(0, 700);

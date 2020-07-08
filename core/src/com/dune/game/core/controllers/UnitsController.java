@@ -3,6 +3,7 @@ package com.dune.game.core.controllers;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.dune.game.core.Building;
 import com.dune.game.core.map.BattleMap;
 import com.dune.game.core.GameController;
 import com.dune.game.core.units.AbstractUnit;
@@ -34,26 +35,35 @@ public class UnitsController {
         this.selectUnits = new ArrayList<> ();
         this.tmp = new Vector2 ();
         for (int i = 0; i < 5; i++) {
-            choicePoint();
-            createBattleTank (gc.getPlayerLogic (), tmp.x,tmp.y);
+            setupBattleTank (gc.getPlayerLogic (),false);
         }
-        choicePoint();
-        createHarvester(gc.getPlayerLogic(), tmp.x,tmp.y);
+            setupHarvester (gc.getPlayerLogic (),false);
         for (int i = 0; i < 2; i++) {
-            choicePoint();
-            createBattleTank (gc.getAiLogic (), tmp.x,tmp.y);
+            setupBattleTank (gc.getAiLogic (),false);
         }
-        choicePoint();
-        createHarvester(gc.getAiLogic (), tmp.x,tmp.y);
+        setupHarvester (gc.getAiLogic (),false);
     }
 
-    private Vector2 choicePoint() {
+    private Vector2 choicePoint(BaseLogic baseLogic) {
         float X,Y;
+        Vector2 basePosition = basePosition (baseLogic);
         do {
             X = MathUtils.random (0, gc.getMap ().getSizeX () - 1) * BattleMap.CELL_SIZE + BattleMap.CELL_SIZE / 2;
             Y = MathUtils.random (0, gc.getMap ().getSizeY () - 1) * BattleMap.CELL_SIZE + BattleMap.CELL_SIZE / 2;
-        } while(! gc.getMap ().isCellPassable(tmp.set (X,Y),false));
+        } while(! gc.getMap ().isCellPassable(tmp.set (X,Y),false) || tmp.set(X,Y).dst(basePosition)>200);
         return tmp;
+    }
+
+    public Vector2 basePosition(BaseLogic baseLogic) {
+        Vector2 basePosition = new Vector2 ();
+
+        for (int i = 0; i < gc.getBuildingsController ().getActiveList ().size (); i++) {
+            Building b = gc.getBuildingsController ().getActiveList ().get(i);
+            if (b.getBuildingType ()== Building.Type.STOCK && b.getOwnerLogic ().getOwnerType () == baseLogic.getOwnerType ()) {
+                basePosition = b.getPosition ();
+            }
+        }
+        return basePosition;
     }
 
     public void createBattleTank(BaseLogic baseLogic, float x, float y) {
@@ -145,6 +155,26 @@ public class UnitsController {
             if (au.getUnitType() == unitType && au.getBaseLogic() == ownerLogic) {
                 out.add((T) au);
             }
+        }
+    }
+
+    public void setupBattleTank(BaseLogic ownerLogic, boolean isCreateByPlayer) {
+        boolean isEnough = true;
+        if (isCreateByPlayer)
+            isEnough = ownerLogic.subMoney(500);
+        if (isEnough) {
+            choicePoint (ownerLogic);
+            createBattleTank (ownerLogic, tmp.x, tmp.y);
+        }
+    }
+
+    public void setupHarvester(BaseLogic ownerLogic, boolean isCreateByPlayer) {
+        boolean isEnough = true;
+        if (isCreateByPlayer)
+             isEnough = ownerLogic.subMoney(1000);
+        if (isEnough) {
+            choicePoint (ownerLogic);
+            createHarvester (ownerLogic, tmp.x, tmp.y);
         }
     }
 }

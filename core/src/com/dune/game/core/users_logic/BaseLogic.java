@@ -1,6 +1,7 @@
 package com.dune.game.core.users_logic;
 
 import com.badlogic.gdx.math.Vector2;
+import com.dune.game.core.Building;
 import com.dune.game.core.GameController;
 import com.dune.game.core.interfaces.Targetable;
 import com.dune.game.core.units.AbstractUnit;
@@ -32,6 +33,14 @@ public class BaseLogic {
         this.tmpPlayers = new ArrayList<> ();
         this.tmpAiHarvesters = new ArrayList<> ();
         this.tmp = new Vector2();
+    }
+
+    public boolean subMoney(int amount){
+        if (amount<=money) {
+            this.money -= amount;
+            return true;
+        }
+        return false;
     }
 
     public void addMoney(int amount) {
