@@ -35,9 +35,8 @@ public abstract class AbstractUnit extends GameObject implements Poolable, Targe
     protected float angle;
     protected float speed;
     protected float rotationSpeed;
-
-    protected float moveTimer;
     protected float lifeTime;
+    protected float moveTimer;
     protected float timePerFrame;
     protected int container;
     protected int containerCapacity;

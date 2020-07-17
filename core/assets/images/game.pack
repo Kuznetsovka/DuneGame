@@ -41,8 +41,8 @@ simpleButton
 shortButton
   rotate: false
   xy: 260, 164
-  size: 80, 80
-  orig: 80, 80
+  size: 20, 20
+  orig: 20, 20
   offset: 0, 0
   index: -1
 resource

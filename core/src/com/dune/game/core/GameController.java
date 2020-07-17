@@ -4,6 +4,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,6 +17,7 @@ import com.dune.game.core.controllers.ParticleController;
 import com.dune.game.core.controllers.ProjectilesController;
 import com.dune.game.core.controllers.UnitsController;
 import com.dune.game.core.gui.GuiAiInfo;
+import com.dune.game.core.gui.GuiBuilding;
 import com.dune.game.core.gui.GuiPlayerInfo;
 import com.dune.game.core.map.BattleMap;
 import com.dune.game.core.units.AbstractUnit;
@@ -26,6 +28,7 @@ import com.dune.game.screens.ScreenManager;
 import com.dune.game.screens.utils.Assets;
 import lombok.Getter;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +56,7 @@ public class GameController {
     private List<AbstractUnit> selectedUnits;
     private Stage stage;
     private boolean isMultiSelect;
+    private GuiBuilding guiBuilding;
 
 //    private Music music;
 //    private Sound sound;
@@ -135,6 +139,7 @@ public class GameController {
             }
             ScreenManager.getInstance().pointCameraTo(pointOfView);
         }
+
     }
 
     public boolean isUnitSelected(AbstractUnit abstractUnit) {
@@ -185,6 +190,11 @@ public class GameController {
                                 selectedUnits.add(t);
                             }
                         }
+                        Building b=map.getBuildingFromPoint(tmp);
+                        if (b!=null && b.getOwnerLogic () == playerLogic && b.getBuildingType () == Building.Type.STOCK) {
+                            guiBuilding.setVisible (true);
+                            guiBuilding.setPosition(tmp.x,tmp.y);
+                        }
                     }
                     if (selectedUnits.size()>1)
                         isMultiSelect = true;
@@ -202,8 +212,14 @@ public class GameController {
         Skin skin = new Skin();
         skin.addRegions(Assets.getInstance().getAtlas());
         BitmapFont font14 = Assets.getInstance().getAssetManager().get("fonts/font14.ttf");
+        Label.LabelStyle labelStyle = new Label.LabelStyle(font14, Color.WHITE);
+        Label.LabelStyle labelStyle2 = new Label.LabelStyle(font14, Color.RED);
+        skin.add("simpleLabel", labelStyle);
+        skin.add("redLabel", labelStyle2);
+
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle(
                 skin.getDrawable("smButton"), null, null, font14);
+
         final TextButton menuBtn = new TextButton("Menu", textButtonStyle);
         menuBtn.addListener(new ClickListener() {
             @Override
@@ -220,9 +236,15 @@ public class GameController {
             }
         });
 
-        final TextButton createTank = new TextButton("Create Tank", textButtonStyle);
-        final TextButton createHarvester = new TextButton("Create Harvester", textButtonStyle);
-        createTank.addListener(new ClickListener () {
+        menuBtn.setPosition(0, 0);
+        pauseBtn.setPosition(130, 0);
+        Group menuGroup = new Group();
+        menuGroup.addActor(menuBtn);
+        menuGroup.addActor(pauseBtn);
+        menuGroup.setPosition(900, 10);
+        guiBuilding = new GuiBuilding (skin,textButtonStyle);
+        guiBuilding.setVisible (false);
+        guiBuilding.getCreateTankBtn().addListener(new ClickListener () {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 getUnitsController ().setupBattleTank (playerLogic,true);
@@ -230,33 +252,21 @@ public class GameController {
             }
         });
 
-        createHarvester.addListener(new ClickListener() {
+        guiBuilding.getCreateHarvesterBtn().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 getUnitsController ().setupHarvester (playerLogic,true);
 
             }
         });
-        Group menuGroup = new Group();
-        menuBtn.setPosition(0, 0);
-        pauseBtn.setPosition(130, 0);
-        menuGroup.addActor(menuBtn);
-        menuGroup.addActor(pauseBtn);
-        menuGroup.setPosition(900, 10);
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font14, Color.WHITE);
-        Label.LabelStyle labelStyle2 = new Label.LabelStyle(font14, Color.RED);
-        skin.add("simpleLabel", labelStyle);
-        skin.add("redLabel", labelStyle2);
+        guiBuilding.getCloseBtn ().addListener(new ClickListener () {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                guiBuilding.setVisible (false);
 
-        Group createGroup = new Group();
-        createGroup.setVisible (false);
-        createGroup.setPosition(getUnitsController ().basePosition(getPlayerLogic()).x,getUnitsController ().basePosition(getPlayerLogic()).y);
-        createTank.setPosition(0, 0);
-        createHarvester.setPosition(130, 0);
-        createGroup.addActor(createTank);
-        createGroup.addActor(createHarvester);
-        stage.addActor(createGroup);
+            }
+        });
 
         guiPlayerInfo = new GuiPlayerInfo(playerLogic, skin);
         guiPlayerInfo.setPosition(0, 700);
@@ -264,7 +274,7 @@ public class GameController {
         guiAiInfo.setPosition(900, 700);
         stage.addActor(guiAiInfo);
         stage.addActor(guiPlayerInfo);
-        stage.addActor(menuGroup);
+        stage.addActor(guiBuilding);
         skin.dispose();
     }
 }

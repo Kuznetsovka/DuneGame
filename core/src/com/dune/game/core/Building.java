@@ -27,13 +27,17 @@ public class Building extends GameObject implements Poolable, Targetable, Select
     private TextureRegion textureEntrance;
     private TextureRegion progressbarTexture;
     private Vector2 textureWorldPosition;
+    private boolean selected;
     private int hpMax;
     private int hp;
     private int cellX, cellY;
 
+    public void selecting(boolean is){
+        selected = is;
+    }
     @Override
     public boolean isSelect() {
-        return false;
+        return selected;
     }
 
     @Override

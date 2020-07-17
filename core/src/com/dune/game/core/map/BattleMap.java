@@ -75,6 +75,15 @@ public class BattleMap implements GameMap {
         return cells[cellX][cellY].buildingCore;
     }
 
+    public Building getBuildingFromPoint(Vector2 point) {
+        int cellX = (int) (point.x / CELL_SIZE);
+        int cellY = (int) (point.y / CELL_SIZE);
+        if (cellX < 0 || cellY < 0 || cellX >= COLUMNS_COUNT || cellY >= ROWS_COUNT) {
+            return null;
+        }
+        return cells[cellX][cellY].buildingCore;
+    }
+
     public int getResourceCount(Vector2 point) {
         int cx = (int) (point.x / CELL_SIZE);
         int cy = (int) (point.y / CELL_SIZE);

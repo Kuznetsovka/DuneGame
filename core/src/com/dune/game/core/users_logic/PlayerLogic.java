@@ -21,6 +21,7 @@ public class PlayerLogic extends BaseLogic {
 
 
     public void update(float dt) {
+        tmp.set (0,0);
         this.unitsCount = gc.getUnitsController().getPlayerUnits ().size ();
         if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
             if (gc.getSelectedUnits().size()>1){
@@ -53,9 +54,9 @@ public class PlayerLogic extends BaseLogic {
 
     public void unitProcessing(AbstractUnit unit) {
         if (!gc.isMultiSelect ())
-            tmp = gc.getMouse ();
+            tmp.set(gc.getMouse ());
         else
-            tmp = unit.getDestination();
+            tmp.set(unit.getDestination());
         if (unit.getUnitType() == UnitType.HARVESTER) {
             Harvester h = (Harvester) unit;
             if (!h.isFull()) {
@@ -82,7 +83,7 @@ public class PlayerLogic extends BaseLogic {
     }
 
     private void pointInFormation() {
-        tmp = gc.getMouse ();
+        tmp.set(gc.getMouse ());
         int n = (int)Math.ceil(Math.sqrt (gc.getSelectedUnits ().size()));
         // центр
         int i = n / 2;

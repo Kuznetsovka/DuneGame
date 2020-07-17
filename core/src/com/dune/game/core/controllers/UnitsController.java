@@ -34,11 +34,12 @@ public class UnitsController {
         this.aiUnits = new ArrayList<>();
         this.selectUnits = new ArrayList<> ();
         this.tmp = new Vector2 ();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 7; i++) {
             setupBattleTank (gc.getPlayerLogic (),false);
         }
-            setupHarvester (gc.getPlayerLogic (),false);
-        for (int i = 0; i < 2; i++) {
+        setupHarvester (gc.getPlayerLogic (),false);
+        setupHarvester (gc.getPlayerLogic (),false);
+        for (int i = 0; i < 1; i++) {
             setupBattleTank (gc.getAiLogic (),false);
         }
         setupHarvester (gc.getAiLogic (),false);
