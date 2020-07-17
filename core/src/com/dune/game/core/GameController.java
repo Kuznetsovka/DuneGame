@@ -115,6 +115,8 @@ public class GameController {
             pointOfView.y += CAMERA_SPEED * dt;
             if (pointOfView.y + ScreenManager.HALF_WORLD_HEIGHT > BattleMap.MAP_HEIGHT_PX) {
                 pointOfView.y = BattleMap.MAP_HEIGHT_PX - ScreenManager.HALF_WORLD_HEIGHT;
+            } else {
+                guiBuilding.setPosition (guiBuilding.getX (),guiBuilding.getY()-CAMERA_SPEED * dt );
             }
             ScreenManager.getInstance().pointCameraTo(pointOfView);
         }
@@ -122,21 +124,30 @@ public class GameController {
             pointOfView.y -= CAMERA_SPEED * dt;
             if (pointOfView.y < ScreenManager.HALF_WORLD_HEIGHT) {
                 pointOfView.y = ScreenManager.HALF_WORLD_HEIGHT;
+            } else {
+                guiBuilding.setPosition (guiBuilding.getX (),guiBuilding.getY()+CAMERA_SPEED * dt );
             }
+
             ScreenManager.getInstance().pointCameraTo(pointOfView);
         }
         if (Gdx.input.getX() < 10) {
             pointOfView.x -= CAMERA_SPEED * dt;
             if (pointOfView.x < ScreenManager.HALF_WORLD_WIDTH) {
                 pointOfView.x = ScreenManager.HALF_WORLD_WIDTH;
+            } else {
+                guiBuilding.setPosition (guiBuilding.getX () + CAMERA_SPEED * dt,guiBuilding.getY());
             }
+
             ScreenManager.getInstance().pointCameraTo(pointOfView);
         }
         if (Gdx.input.getX() > 1270) {
             pointOfView.x += CAMERA_SPEED * dt;
             if (pointOfView.x + ScreenManager.HALF_WORLD_WIDTH > BattleMap.MAP_WIDTH_PX) {
                 pointOfView.x = BattleMap.MAP_WIDTH_PX - ScreenManager.HALF_WORLD_WIDTH;
+            } else {
+                guiBuilding.setPosition (guiBuilding.getX () - CAMERA_SPEED * dt,guiBuilding.getY());
             }
+
             ScreenManager.getInstance().pointCameraTo(pointOfView);
         }
 
@@ -193,7 +204,7 @@ public class GameController {
                         Building b=map.getBuildingFromPoint(tmp);
                         if (b!=null && b.getOwnerLogic () == playerLogic && b.getBuildingType () == Building.Type.STOCK) {
                             guiBuilding.setVisible (true);
-                            guiBuilding.setPosition(tmp.x,tmp.y);
+                            guiBuilding.setPosition(mouse.x,mouse.y);
                         }
                     }
                     if (selectedUnits.size()>1)
