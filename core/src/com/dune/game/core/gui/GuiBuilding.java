@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
+import com.dune.game.core.users_logic.PlayerLogic;
 import com.dune.game.screens.utils.Assets;
 import lombok.Getter;
 
@@ -13,8 +14,10 @@ public class GuiBuilding extends Group {
     private TextButton createTankBtn;
     private TextButton createHarvesterBtn;
     private TextButton closeBtn;
+    private PlayerLogic playerLogic;
 
-    public GuiBuilding(Skin skin, TextButton.TextButtonStyle textButtonStyle) {
+    public GuiBuilding(PlayerLogic playerLogic,Skin skin, TextButton.TextButtonStyle textButtonStyle) {
+        this.playerLogic = playerLogic;
         BitmapFont font14 = Assets.getInstance().getAssetManager().get("fonts/font14.ttf");
         TextButton.TextButtonStyle textCloseBtnStyle = new TextButton.TextButtonStyle(
                 skin.getDrawable("shortButton"), null, null, font14);

@@ -253,7 +253,7 @@ public class GameController {
         menuGroup.addActor(menuBtn);
         menuGroup.addActor(pauseBtn);
         menuGroup.setPosition(900, 10);
-        guiBuilding = new GuiBuilding (skin,textButtonStyle);
+        guiBuilding = new GuiBuilding (playerLogic,skin,textButtonStyle);
         guiBuilding.setVisible (false);
         guiBuilding.getCreateTankBtn().addListener(new ClickListener () {
             @Override

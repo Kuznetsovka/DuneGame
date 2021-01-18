@@ -47,6 +47,9 @@ public class AiLogic extends BaseLogic {
                     }
                 }
             }
+//            if (tmpPlayerHarvesters.size ()>1 && ){
+//
+//            }
         }
     }
 }
